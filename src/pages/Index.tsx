@@ -1,7 +1,6 @@
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
-import ServicesSection from "@/components/ServicesSection";
-import MissedCallsSection from "@/components/MissedCallsSection";
+import AgentShowcaseSection from "@/components/AgentShowcaseSection";
 import AnalyticsDashboardSection from "@/components/AnalyticsDashboardSection";
 import HowItWorksSection from "@/components/HowItWorksSection";
 import WhyUsSection from "@/components/WhyUsSection";
@@ -12,12 +11,10 @@ const Index = () => (
   <div className="min-h-screen bg-background">
     <Navbar />
     <HeroSection />
-    {/* Transition to light sections — Conduit-style */}
-    <ServicesSection />
-    <MissedCallsSection />
+    {/* Seamless light sections */}
+    <AgentShowcaseSection />
     <AnalyticsDashboardSection />
     <HowItWorksSection />
-    {/* Back to dark for social proof + CTA */}
     <WhyUsSection />
     <ContactSection />
     <Footer />

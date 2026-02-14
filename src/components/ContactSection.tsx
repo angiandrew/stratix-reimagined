@@ -6,19 +6,16 @@ const ContactSection = () => {
   const [email, setEmail] = useState("");
 
   return (
-    <section id="contact" className="py-24 relative">
-      {/* Background glow */}
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[400px] w-[600px] rounded-full bg-primary/5 blur-[100px]" />
-      </div>
-
-      <div className="container mx-auto px-4 relative">
+    <section id="contact" className="section-light py-24">
+      <div className="container mx-auto px-4">
         <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-3xl md:text-5xl font-bold mb-4">
-            Ready to automate{" "}
-            <span className="text-gradient">your growth?</span>
+          <span className="inline-block text-xs font-semibold uppercase tracking-widest text-[hsl(var(--primary))] mb-4">
+            Get Started
+          </span>
+          <h2 className="text-3xl md:text-5xl font-bold mb-4" style={{ color: "hsl(var(--light-fg))" }}>
+            Ready to automate your growth?
           </h2>
-          <p className="text-muted-foreground max-w-xl mx-auto mb-10">
+          <p className="max-w-xl mx-auto mb-10 text-sm" style={{ color: "hsl(var(--light-muted))" }}>
             Tell us about your business. We'll map your workflows and ship your first AI agent fast.
           </p>
 
@@ -29,7 +26,12 @@ const ContactSection = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter your work email"
-              className="flex-1 rounded-lg border border-border bg-secondary/60 px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 backdrop-blur-sm"
+              className="flex-1 rounded-lg border px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
+              style={{
+                borderColor: "hsl(var(--light-border))",
+                color: "hsl(var(--light-fg))",
+                background: "hsl(var(--light-card))",
+              }}
             />
             <Button size="lg" className="text-sm font-semibold gap-2 shrink-0">
               Book a Demo <ArrowRight size={16} />
@@ -37,23 +39,23 @@ const ContactSection = () => {
           </div>
 
           {/* Contact details */}
-          <div className="flex flex-col sm:flex-row justify-center gap-8 text-sm text-muted-foreground">
+          <div className="flex flex-col sm:flex-row justify-center gap-8 text-sm" style={{ color: "hsl(var(--light-muted))" }}>
             <a
-              href="mailto:info@stratixos.com"
-              className="flex items-center gap-2 hover:text-foreground transition-colors"
+              href="mailto:contact@stratixos.com"
+              className="flex items-center gap-2 hover:text-[hsl(var(--light-fg))] transition-colors"
             >
-              <Mail size={16} className="text-primary" />
-              info@stratixos.com
+              <Mail size={16} className="text-[hsl(var(--primary))]" />
+              contact@stratixos.com
             </a>
             <a
-              href="tel:+1234567890"
-              className="flex items-center gap-2 hover:text-foreground transition-colors"
+              href="tel:+17725385517"
+              className="flex items-center gap-2 hover:text-[hsl(var(--light-fg))] transition-colors"
             >
-              <Phone size={16} className="text-primary" />
-              (123) 456-7890
+              <Phone size={16} className="text-[hsl(var(--primary))]" />
+              (772) 538-5517
             </a>
             <span className="flex items-center gap-2">
-              <MapPin size={16} className="text-primary" />
+              <MapPin size={16} className="text-[hsl(var(--primary))]" />
               Miami, FL
             </span>
           </div>
