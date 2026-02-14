@@ -40,18 +40,18 @@ const services = [
 ];
 
 const ServicesSection = () => (
-  <section id="services" className="section-light py-24">
-    <div className="container mx-auto px-4">
-      <div className="text-center mb-16">
-        <span className="inline-block text-xs font-semibold uppercase tracking-widest text-[hsl(var(--primary))] mb-4">
-          What We Do
-        </span>
-        <h2 className="text-3xl md:text-5xl font-bold mb-4" style={{ color: "hsl(var(--light-fg))" }}>
-          Complete AI automation
-        </h2>
-        <p className="text-light-muted max-w-xl mx-auto">
-          Not just calls and bookings — full-service AI automation under one roof.
-        </p>
+    <section className="section-light py-24">
+      <div className="container mx-auto px-4">
+        <div className="text-center mb-16">
+          <span className="inline-block text-xs font-semibold uppercase tracking-widest text-[hsl(var(--primary))] mb-4">
+            What We Do
+          </span>
+          <h2 className="text-3xl md:text-5xl font-bold mb-4" style={{ color: "hsl(var(--light-fg))" }}>
+            One platform, every agent you need
+          </h2>
+          <p className="text-light-muted max-w-xl mx-auto">
+            Complete AI automation under one roof — not just calls and bookings.
+          </p>
       </div>
 
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">

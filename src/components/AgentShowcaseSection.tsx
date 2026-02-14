@@ -16,77 +16,14 @@ const agents = [
       "Captures name, phone, email, and reason for calling",
       "Transfers urgent calls to you immediately",
       "Sends detailed lead summaries via text/email",
-      "Increases lead conversion by 391%",
     ],
     hasCalculator: true,
-    mockup: {
-      title: "Live Call Dashboard",
-      status: "Call in Progress",
-      message: 'AI Agent: "How can I help you today?"',
-    },
-  },
-  {
-    id: "website",
-    label: "Website Agent",
-    icon: Globe,
-    title: "AI Website Chat Agent",
-    description:
-      "Deploy a conversational AI directly on your website that engages visitors, answers questions, and converts traffic into qualified leads around the clock.",
-    features: [
-      "Engages visitors within seconds of landing",
-      "Answers FAQs and product questions instantly",
-      "Qualifies leads and collects contact info",
-      "Books appointments directly from chat",
-      "Reduces bounce rate by up to 40%",
+    stats: [
+      { value: "$126,000+", label: "Average annual revenue lost by small businesses due to missed calls." },
+      { value: "Up to 85%", label: "Of callers won't call back or leave a voicemail. They move to a competitor." },
+      { value: "~7% Conversion", label: "Leads that hit voicemail convert at roughly 7% and drop sharply the longer you wait to respond." },
     ],
-    hasCalculator: false,
-    mockup: {
-      title: "Chat Widget",
-      status: "Visitor Engaged",
-      message: '"Tell me about your services..."',
-    },
-  },
-  {
-    id: "inquiry",
-    label: "Booking Agent",
-    icon: FileText,
-    title: "Inquiry & Booking Agent",
-    description:
-      "Automatically qualifies every inquiry that comes in, whether from a form, email, or call, then books appointments directly into your calendar.",
-    features: [
-      "Qualifies leads based on your custom criteria",
-      "Routes high-value inquiries for immediate follow-up",
-      "Books appointments with zero back-and-forth",
-      "Syncs with Google Calendar, Outlook, and more",
-      "Sends automated confirmations and reminders",
-    ],
-    hasCalculator: false,
-    mockup: {
-      title: "Booking Pipeline",
-      status: "3 New Bookings",
-      message: "Today: 12 qualified, 3 booked",
-    },
-  },
-  {
-    id: "social",
-    label: "Social Media Agent",
-    icon: Share2,
-    title: "Complete Social Media Agent",
-    description:
-      "An AI that manages your social presence end to end. From content creation and scheduling to responding to DMs, comments, and reviews.",
-    features: [
-      "Generates and schedules posts across platforms",
-      "Responds to DMs and comments intelligently",
-      "Monitors brand mentions and sentiment",
-      "Creates content calendars aligned with your goals",
-      "Reports engagement metrics weekly",
-    ],
-    hasCalculator: false,
-    mockup: {
-      title: "Social Dashboard",
-      status: "12 Posts Scheduled",
-      message: "Engagement up 28% this week",
-    },
+    statsCta: "With StratixOS, your receptionist picks up 100% of calls and books appointments automatically.",
   },
   {
     id: "coldcaller",
@@ -103,11 +40,66 @@ const agents = [
       "Provides call transcripts and lead scores",
     ],
     hasCalculator: false,
-    mockup: {
-      title: "Outbound Campaign",
-      status: "247 Calls Today",
-      message: "18 meetings booked this week",
-    },
+    stats: [
+      { value: "30-50%", label: "Higher conversion rates compared to traditional cold calling." },
+      { value: "Up to 40%", label: "Higher response rates by calling leads at the perfect time with instant follow-ups." },
+      { value: "70-80%", label: "Cheaper than human callers. Unlimited calls at once. No dialing limits." },
+    ],
+    statsCta: null,
+  },
+  {
+    id: "website",
+    label: "Website Agent",
+    icon: Globe,
+    title: "AI Website Chat Agent",
+    description:
+      "Deploy a conversational AI directly on your website that engages visitors, answers questions, and converts traffic into qualified leads around the clock.",
+    features: [
+      "Engages visitors within seconds of landing",
+      "Answers FAQs and product questions instantly",
+      "Qualifies leads and collects contact info",
+      "Books appointments directly from chat",
+      "Reduces bounce rate by up to 40%",
+    ],
+    hasCalculator: false,
+    stats: null,
+    statsCta: null,
+  },
+  {
+    id: "inquiry",
+    label: "Booking Agent",
+    icon: FileText,
+    title: "Inquiry & Booking Agent",
+    description:
+      "Automatically qualifies every inquiry that comes in, whether from a form, email, or call, then books appointments directly into your calendar.",
+    features: [
+      "Qualifies leads based on your custom criteria",
+      "Routes high-value inquiries for immediate follow-up",
+      "Books appointments with zero back-and-forth",
+      "Syncs with Google Calendar, Outlook, and more",
+      "Sends automated confirmations and reminders",
+    ],
+    hasCalculator: false,
+    stats: null,
+    statsCta: null,
+  },
+  {
+    id: "social",
+    label: "Social Media Agent",
+    icon: Share2,
+    title: "Complete Social Media Agent",
+    description:
+      "An AI that manages your social presence end to end. From content creation and scheduling to responding to DMs, comments, and reviews.",
+    features: [
+      "Generates and schedules posts across platforms",
+      "Responds to DMs and comments intelligently",
+      "Monitors brand mentions and sentiment",
+      "Creates content calendars aligned with your goals",
+      "Reports engagement metrics weekly",
+    ],
+    hasCalculator: false,
+    stats: null,
+    statsCta: null,
   },
 ];
 
@@ -116,18 +108,18 @@ const AgentShowcaseSection = () => {
   const active = agents.find((a) => a.id === activeId)!;
 
   return (
-    <section id="services" className="section-light py-24">
+    <section id="popular-agents" className="section-light py-24">
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-12">
           <span className="inline-block text-xs font-semibold uppercase tracking-widest text-[hsl(var(--primary))] mb-4">
-            Our AI Agents
+            Popular Agents
           </span>
           <h2 className="text-3xl md:text-5xl font-bold mb-4" style={{ color: "hsl(var(--light-fg))" }}>
-            One platform, every agent you need
+            Purpose-built AI that drives results
           </h2>
           <p className="text-light-muted max-w-2xl mx-auto">
-            Each agent is purpose-built, fully customizable, and integrates seamlessly with your existing tools.
+            Each agent is fully customizable and integrates seamlessly with your existing tools.
           </p>
         </div>
 
@@ -157,6 +149,38 @@ const AgentShowcaseSection = () => {
 
         {/* Agent content */}
         <div className="max-w-6xl mx-auto">
+          {/* Stats row (if agent has stats) */}
+          {active.stats && (
+            <div className="mb-12">
+              <div className="grid md:grid-cols-3 gap-6 mb-6">
+                {active.stats.map((stat, i) => (
+                  <div
+                    key={i}
+                    className="rounded-2xl border p-6 text-center"
+                    style={{ borderColor: "hsl(var(--light-border))", background: "hsl(var(--light-card))" }}
+                  >
+                    <div className="text-2xl md:text-3xl font-black mb-2" style={{ color: "hsl(var(--destructive))" }}>
+                      {stat.value}
+                    </div>
+                    <p className="text-sm leading-relaxed" style={{ color: "hsl(var(--light-muted))" }}>
+                      {stat.label}
+                    </p>
+                  </div>
+                ))}
+              </div>
+              {active.statsCta && (
+                <div
+                  className="rounded-2xl border p-6 text-center"
+                  style={{ borderColor: "hsl(187 72% 53% / 0.3)", background: "hsl(187 72% 53% / 0.05)" }}
+                >
+                  <p className="text-sm font-semibold" style={{ color: "hsl(var(--primary))" }}>
+                    {active.statsCta}
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
+
           <div className="grid lg:grid-cols-5 gap-12 items-start">
             {/* Left: Info */}
             <div className="lg:col-span-3">
@@ -199,7 +223,7 @@ const AgentShowcaseSection = () => {
                 }}
               >
                 <div className="text-sm font-semibold mb-4" style={{ color: "hsl(var(--light-fg))" }}>
-                  {active.mockup.title}
+                  {active.id === "inbound" ? "Live Call Dashboard" : active.id === "coldcaller" ? "Outbound Campaign" : active.id === "website" ? "Chat Widget" : active.id === "inquiry" ? "Booking Pipeline" : "Social Dashboard"}
                 </div>
                 <div
                   className="rounded-xl p-5"
@@ -208,11 +232,11 @@ const AgentShowcaseSection = () => {
                   <div className="flex items-center gap-2 mb-2">
                     <div className="h-2 w-2 rounded-full bg-[hsl(var(--success))] animate-pulse" />
                     <span className="text-xs font-semibold" style={{ color: "hsl(var(--light-fg))" }}>
-                      {active.mockup.status}
+                      {active.id === "inbound" ? "Call in Progress" : active.id === "coldcaller" ? "247 Calls Today" : active.id === "website" ? "Visitor Engaged" : active.id === "inquiry" ? "3 New Bookings" : "12 Posts Scheduled"}
                     </span>
                   </div>
                   <p className="text-xs" style={{ color: "hsl(var(--light-muted))" }}>
-                    {active.mockup.message}
+                    {active.id === "inbound" ? 'AI Agent: "How can I help you today?"' : active.id === "coldcaller" ? "18 meetings booked this week" : active.id === "website" ? '"Tell me about your services..."' : active.id === "inquiry" ? "Today: 12 qualified, 3 booked" : "Engagement up 28% this week"}
                   </p>
                 </div>
               </div>
