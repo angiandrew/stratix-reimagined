@@ -2,42 +2,18 @@ import { useState } from "react";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ParticleNetwork from "@/components/ParticleNetwork";
-import agentWorkflows from "@/assets/agent-workflows.png";
-import agentVoice from "@/assets/agent-voice.png";
-import agentAnalytics from "@/assets/agent-analytics.png";
 
 const HeroSection = () => {
   const [email, setEmail] = useState("");
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
-      {/* Interactive particle network background */}
       <ParticleNetwork />
 
-      {/* Subtle gradient overlay for depth */}
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute top-1/4 left-1/2 -translate-x-1/2 h-[600px] w-[800px] rounded-full bg-primary/5 blur-[120px]" />
-        <div className="absolute bottom-0 left-1/4 h-[400px] w-[400px] rounded-full bg-primary/3 blur-[100px]" />
       </div>
 
-      {/* Floating characters */}
-      <img
-        src={agentWorkflows}
-        alt="AI Workflow Agent"
-        className="absolute top-[18%] right-[8%] w-28 md:w-36 animate-float-slow opacity-90 pointer-events-none hidden md:block"
-      />
-      <img
-        src={agentVoice}
-        alt="AI Voice Agent"
-        className="absolute bottom-[22%] left-[6%] w-24 md:w-32 animate-float-medium opacity-85 pointer-events-none hidden md:block"
-      />
-      <img
-        src={agentAnalytics}
-        alt="AI Analytics Agent"
-        className="absolute bottom-[15%] right-[12%] w-20 md:w-28 animate-float-fast opacity-80 pointer-events-none hidden md:block"
-      />
-
-      {/* Content */}
       <div className="relative z-10 container mx-auto px-4 text-center">
         <div className="max-w-4xl mx-auto">
           <div className="inline-flex items-center gap-2 rounded-full border border-border bg-secondary/50 px-4 py-1.5 text-xs text-muted-foreground mb-8 backdrop-blur-sm">
@@ -56,7 +32,6 @@ const HeroSection = () => {
             for progressive organizations.
           </p>
 
-          {/* Email + CTA */}
           <div className="flex flex-col sm:flex-row gap-3 justify-center max-w-lg mx-auto mb-6">
             <input
               type="email"
