@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import ParticleNetwork from "@/components/ParticleNetwork";
 import agentWorkflows from "@/assets/agent-workflows.png";
 import agentVoice from "@/assets/agent-voice.png";
 import agentAnalytics from "@/assets/agent-analytics.png";
@@ -10,11 +11,13 @@ const HeroSection = () => {
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
-      {/* Background glow effects */}
+      {/* Interactive particle network background */}
+      <ParticleNetwork />
+
+      {/* Subtle gradient overlay for depth */}
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute top-1/4 left-1/2 -translate-x-1/2 h-[600px] w-[800px] rounded-full bg-primary/5 blur-[120px]" />
         <div className="absolute bottom-0 left-1/4 h-[400px] w-[400px] rounded-full bg-primary/3 blur-[100px]" />
-        <div className="absolute top-1/3 right-0 h-[300px] w-[300px] rounded-full bg-accent/3 blur-[80px]" />
       </div>
 
       {/* Floating characters */}
@@ -37,7 +40,7 @@ const HeroSection = () => {
       {/* Content */}
       <div className="relative z-10 container mx-auto px-4 text-center">
         <div className="max-w-4xl mx-auto">
-          <div className="inline-flex items-center gap-2 rounded-full border border-border bg-secondary/50 px-4 py-1.5 text-xs text-muted-foreground mb-8">
+          <div className="inline-flex items-center gap-2 rounded-full border border-border bg-secondary/50 px-4 py-1.5 text-xs text-muted-foreground mb-8 backdrop-blur-sm">
             <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
             AI-powered automation for progressive organizations
           </div>
@@ -53,7 +56,7 @@ const HeroSection = () => {
             for progressive organizations.
           </p>
 
-          {/* Email + CTA — GitHub style */}
+          {/* Email + CTA */}
           <div className="flex flex-col sm:flex-row gap-3 justify-center max-w-lg mx-auto mb-6">
             <input
               type="email"
@@ -76,7 +79,6 @@ const HeroSection = () => {
         </div>
       </div>
 
-      {/* Bottom gradient fade */}
       <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent" />
     </section>
   );

@@ -54,7 +54,6 @@ const ParticleNetwork = () => {
         if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
         if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
 
-        // Mouse attraction
         const dx = mouse.x - p.x;
         const dy = mouse.y - p.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
@@ -63,7 +62,6 @@ const ParticleNetwork = () => {
           p.vy += dy * 0.00005;
         }
 
-        // Limit speed
         const speed = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
         if (speed > 1.2) {
           p.vx = (p.vx / speed) * 1.2;
@@ -71,7 +69,7 @@ const ParticleNetwork = () => {
         }
       }
 
-      // Draw connections
+      // Connections between particles
       for (let i = 0; i < particles.length; i++) {
         for (let j = i + 1; j < particles.length; j++) {
           const dx = particles[i].x - particles[j].x;
@@ -82,14 +80,14 @@ const ParticleNetwork = () => {
             ctx.beginPath();
             ctx.moveTo(particles[i].x, particles[i].y);
             ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.strokeStyle = `rgba(56, 189, 208, ${opacity * 0.3})`;
+            ctx.strokeStyle = `rgba(56, 189, 208, ${opacity * 0.25})`;
             ctx.lineWidth = 0.5;
             ctx.stroke();
           }
         }
       }
 
-      // Draw mouse connections
+      // Mouse connections
       for (const p of particles) {
         const dx = mouse.x - p.x;
         const dy = mouse.y - p.y;
@@ -99,7 +97,7 @@ const ParticleNetwork = () => {
           ctx.beginPath();
           ctx.moveTo(p.x, p.y);
           ctx.lineTo(mouse.x, mouse.y);
-          ctx.strokeStyle = `rgba(56, 189, 208, ${opacity * 0.5})`;
+          ctx.strokeStyle = `rgba(56, 189, 208, ${opacity * 0.45})`;
           ctx.lineWidth = 0.8;
           ctx.stroke();
         }
@@ -109,7 +107,7 @@ const ParticleNetwork = () => {
       for (const p of particles) {
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-        ctx.fillStyle = "rgba(56, 189, 208, 0.8)";
+        ctx.fillStyle = "rgba(56, 189, 208, 0.7)";
         ctx.fill();
       }
 
@@ -129,7 +127,6 @@ const ParticleNetwork = () => {
     <canvas
       ref={canvasRef}
       className="absolute inset-0 w-full h-full"
-      style={{ background: "hsl(0 0% 4%)" }}
     />
   );
 };
