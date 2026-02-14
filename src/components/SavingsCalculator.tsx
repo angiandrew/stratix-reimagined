@@ -10,7 +10,7 @@ const SavingsCalculator = () => {
   const [missedCalls, setMissedCalls] = useState(60);
   const [avgRevenue, setAvgRevenue] = useState(1500);
   const [showAdvanced, setShowAdvanced] = useState(false);
-  const [closeRate, setCloseRate] = useState(25);
+  const [closeRate, setCloseRate] = useState(35);
   const [aiRecoveryRate, setAiRecoveryRate] = useState(90);
   const [grossMargin, setGrossMargin] = useState(50);
 
