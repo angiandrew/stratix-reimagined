@@ -1,22 +1,22 @@
 import logo from "@/assets/stratixos-logo.png";
 
 const Footer = () => (
-  <footer className="border-t border-border py-10">
+  <footer className="section-light border-t py-10" style={{ borderColor: "hsl(var(--light-border))" }}>
     <div className="container mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4">
       <div className="flex items-center gap-2">
         <img src={logo} alt="StratixOS" className="h-7 w-7" />
-        <span className="font-semibold text-foreground">
-          Stratix<span className="text-gradient">OS</span>
+        <span className="font-semibold" style={{ color: "hsl(var(--light-fg))" }}>
+          Stratix<span className="text-[hsl(var(--primary))]">OS</span>
         </span>
       </div>
-      <div className="flex gap-6 text-sm text-muted-foreground">
-        <a href="#services" className="hover:text-foreground transition-colors">Services</a>
-        <a href="#how-it-works" className="hover:text-foreground transition-colors">How It Works</a>
-        <a href="#results" className="hover:text-foreground transition-colors">Results</a>
-        <a href="#contact" className="hover:text-foreground transition-colors">Contact</a>
+      <div className="flex gap-6 text-sm" style={{ color: "hsl(var(--light-muted))" }}>
+        <a href="#services" className="hover:text-[hsl(var(--light-fg))] transition-colors">Services</a>
+        <a href="#how-it-works" className="hover:text-[hsl(var(--light-fg))] transition-colors">How It Works</a>
+        <a href="#results" className="hover:text-[hsl(var(--light-fg))] transition-colors">Results</a>
+        <a href="#contact" className="hover:text-[hsl(var(--light-fg))] transition-colors">Contact</a>
       </div>
-      <p className="text-xs text-muted-foreground">
-        © {new Date().getFullYear()} StratixOS. All rights reserved.
+      <p className="text-xs" style={{ color: "hsl(var(--light-muted))" }}>
+        &copy; {new Date().getFullYear()} StratixOS. All rights reserved.
       </p>
     </div>
   </footer>

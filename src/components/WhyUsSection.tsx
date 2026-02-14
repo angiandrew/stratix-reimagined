@@ -6,14 +6,17 @@ const stats = [
 ];
 
 const WhyUsSection = () => (
-  <section id="results" className="py-24 relative">
+  <section id="results" className="section-light py-24 border-t" style={{ borderColor: "hsl(var(--light-border))" }}>
     <div className="container mx-auto px-4">
       <div className="text-center mb-16">
-        <h2 className="text-3xl md:text-5xl font-bold mb-4">
-          Proven <span className="text-gradient">results</span>
+        <span className="inline-block text-xs font-semibold uppercase tracking-widest text-[hsl(var(--primary))] mb-4">
+          Results
+        </span>
+        <h2 className="text-3xl md:text-5xl font-bold mb-4" style={{ color: "hsl(var(--light-fg))" }}>
+          Proven results from day one
         </h2>
-        <p className="text-muted-foreground max-w-xl mx-auto">
-          Our clients see dramatic improvements from day one.
+        <p className="max-w-xl mx-auto text-sm" style={{ color: "hsl(var(--light-muted))" }}>
+          Our clients see dramatic improvements across the board.
         </p>
       </div>
 
@@ -21,11 +24,12 @@ const WhyUsSection = () => (
         {stats.map((s) => (
           <div
             key={s.label}
-            className="rounded-2xl border border-border bg-card/30 p-6 text-center hover:border-primary/30 transition-all duration-300"
+            className="rounded-2xl border p-6 text-center transition-all duration-300 hover:shadow-md"
+            style={{ borderColor: "hsl(var(--light-border))", background: "hsl(var(--light-card))" }}
           >
-            <div className="text-4xl md:text-5xl font-black text-gradient mb-2">{s.value}</div>
-            <div className="text-sm font-semibold text-foreground mb-1">{s.label}</div>
-            <div className="text-xs text-muted-foreground">{s.description}</div>
+            <div className="text-4xl md:text-5xl font-black text-[hsl(var(--primary))] mb-2">{s.value}</div>
+            <div className="text-sm font-semibold mb-1" style={{ color: "hsl(var(--light-fg))" }}>{s.label}</div>
+            <div className="text-xs" style={{ color: "hsl(var(--light-muted))" }}>{s.description}</div>
           </div>
         ))}
       </div>
