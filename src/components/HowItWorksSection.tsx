@@ -1,56 +1,60 @@
-import { Settings, Zap, TrendingUp } from "lucide-react";
+import { Search, Wrench, Rocket } from "lucide-react";
 
 const steps = [
   {
-    icon: Settings,
+    icon: Search,
     step: "01",
-    title: "Quick Setup",
-    description: "We configure your AI agents to match your business, voice, and workflows in under 24 hours.",
+    title: "Discovery",
+    description:
+      "We map your workflows, understand your pain points, and identify the highest-impact automations.",
   },
   {
-    icon: Zap,
+    icon: Wrench,
     step: "02",
-    title: "Go Live",
-    description: "Your AI starts handling calls and chats immediately — no downtime, no missed leads.",
+    title: "Build & Configure",
+    description:
+      "Our team builds your custom AI agents, integrates with your tools, and tests everything thoroughly.",
   },
   {
-    icon: TrendingUp,
+    icon: Rocket,
     step: "03",
-    title: "Watch Growth",
-    description: "See leads pour in with real-time analytics and watch your conversion rates skyrocket.",
+    title: "Launch & Optimize",
+    description:
+      "Go live in days, not months. We continuously monitor and optimize your automations for peak performance.",
   },
 ];
 
 const HowItWorksSection = () => (
   <section id="how-it-works" className="py-24 relative">
-    <div className="container mx-auto px-4">
+    {/* Background accent */}
+    <div className="pointer-events-none absolute inset-0">
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[500px] w-[800px] rounded-full bg-primary/3 blur-[120px]" />
+    </div>
+
+    <div className="container mx-auto px-4 relative">
       <div className="text-center mb-16">
-        <h2 className="text-3xl md:text-4xl font-bold mb-4">
-          How It <span className="text-gradient">Works</span>
+        <h2 className="text-3xl md:text-5xl font-bold mb-4">
+          Live in <span className="text-gradient">days</span>, not months
         </h2>
         <p className="text-muted-foreground max-w-xl mx-auto">
-          Get up and running in three simple steps.
+          A simple, proven process to get your AI agents up and running fast.
         </p>
       </div>
-      <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-        {steps.map((s, i) => (
+
+      <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+        {steps.map((s) => (
           <div
             key={s.step}
-            className="text-center group"
+            className="relative rounded-2xl border border-border bg-card/40 backdrop-blur-sm p-8 hover:border-primary/30 transition-all duration-300 group"
           >
-            <div className="relative mx-auto mb-6">
-              <div className="h-16 w-16 rounded-full border-2 border-primary/30 flex items-center justify-center mx-auto group-hover:border-primary transition-colors duration-300">
-                <s.icon className="text-primary" size={28} />
-              </div>
-              <span className="absolute -top-2 -right-2 text-xs font-bold text-primary bg-primary/10 rounded-full h-7 w-7 flex items-center justify-center">
-                {s.step}
-              </span>
+            <div className="text-[64px] font-black text-foreground/[0.04] absolute top-4 right-6 leading-none select-none">
+              {s.step}
+            </div>
+            <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-colors">
+              <s.icon className="text-primary" size={22} />
             </div>
             <h3 className="text-lg font-semibold mb-2">{s.title}</h3>
-            <p className="text-sm text-muted-foreground">{s.description}</p>
-            {i < steps.length - 1 && (
-              <div className="hidden md:block absolute top-8 left-[calc(50%+40px)] w-[calc(100%-80px)] border-t border-dashed border-primary/20" />
-            )}
+            <p className="text-sm text-muted-foreground leading-relaxed">{s.description}</p>
           </div>
         ))}
       </div>

@@ -1,70 +1,66 @@
+import { useState } from "react";
+import { ArrowRight, Mail, Phone, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Mail, Phone, MapPin } from "lucide-react";
 
-const ContactSection = () => (
-  <section id="contact" className="py-24 relative">
-    <div className="container mx-auto px-4">
-      <div className="text-center mb-16">
-        <h2 className="text-3xl md:text-4xl font-bold mb-4">
-          Ready to <span className="text-gradient">Get Started?</span>
-        </h2>
-        <p className="text-muted-foreground max-w-xl mx-auto">
-          Let's set up your AI agents and start capturing leads today.
-        </p>
+const ContactSection = () => {
+  const [email, setEmail] = useState("");
+
+  return (
+    <section id="contact" className="py-24 relative">
+      {/* Background glow */}
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[400px] w-[600px] rounded-full bg-primary/5 blur-[100px]" />
       </div>
-      <div className="grid md:grid-cols-2 gap-12 max-w-4xl mx-auto">
-        <form
-          className="space-y-4"
-          onSubmit={(e) => {
-            e.preventDefault();
-            window.location.href = "mailto:info@stratixos.com";
-          }}
-        >
-          <Input placeholder="Your Name" className="bg-card/50 border-border/50" />
-          <Input type="email" placeholder="Your Email" className="bg-card/50 border-border/50" />
-          <Textarea placeholder="Tell us about your business..." rows={5} className="bg-card/50 border-border/50" />
-          <Button type="submit" size="lg" className="w-full text-base">
-            Send Message
-          </Button>
-        </form>
-        <div className="flex flex-col justify-center space-y-6">
-          <div className="flex items-center gap-4">
-            <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
-              <Mail className="text-primary" size={20} />
-            </div>
-            <div>
-              <div className="text-sm text-muted-foreground">Email</div>
-              <a href="mailto:info@stratixos.com" className="text-foreground hover:text-primary transition-colors">
-                info@stratixos.com
-              </a>
-            </div>
+
+      <div className="container mx-auto px-4 relative">
+        <div className="max-w-3xl mx-auto text-center">
+          <h2 className="text-3xl md:text-5xl font-bold mb-4">
+            Ready to automate{" "}
+            <span className="text-gradient">your growth?</span>
+          </h2>
+          <p className="text-muted-foreground max-w-xl mx-auto mb-10">
+            Tell us about your business. We'll map your workflows and ship your first AI agent fast.
+          </p>
+
+          {/* Email CTA */}
+          <div className="flex flex-col sm:flex-row gap-3 justify-center max-w-lg mx-auto mb-12">
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Enter your work email"
+              className="flex-1 rounded-lg border border-border bg-secondary/60 px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 backdrop-blur-sm"
+            />
+            <Button size="lg" className="text-sm font-semibold gap-2 shrink-0">
+              Book a Demo <ArrowRight size={16} />
+            </Button>
           </div>
-          <div className="flex items-center gap-4">
-            <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
-              <Phone className="text-primary" size={20} />
-            </div>
-            <div>
-              <div className="text-sm text-muted-foreground">Phone</div>
-              <a href="tel:+1234567890" className="text-foreground hover:text-primary transition-colors">
-                (123) 456-7890
-              </a>
-            </div>
-          </div>
-          <div className="flex items-center gap-4">
-            <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
-              <MapPin className="text-primary" size={20} />
-            </div>
-            <div>
-              <div className="text-sm text-muted-foreground">Location</div>
-              <span className="text-foreground">Miami, FL</span>
-            </div>
+
+          {/* Contact details */}
+          <div className="flex flex-col sm:flex-row justify-center gap-8 text-sm text-muted-foreground">
+            <a
+              href="mailto:info@stratixos.com"
+              className="flex items-center gap-2 hover:text-foreground transition-colors"
+            >
+              <Mail size={16} className="text-primary" />
+              info@stratixos.com
+            </a>
+            <a
+              href="tel:+1234567890"
+              className="flex items-center gap-2 hover:text-foreground transition-colors"
+            >
+              <Phone size={16} className="text-primary" />
+              (123) 456-7890
+            </a>
+            <span className="flex items-center gap-2">
+              <MapPin size={16} className="text-primary" />
+              Miami, FL
+            </span>
           </div>
         </div>
       </div>
-    </div>
-  </section>
-);
+    </section>
+  );
+};
 
 export default ContactSection;
