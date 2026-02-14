@@ -34,6 +34,17 @@
 
     --radius: 0.75rem;
 
+    /* Light section tokens */
+    --light-bg: 0 0% 98%;
+    --light-fg: 215 28% 12%;
+    --light-muted: 215 10% 46%;
+    --light-border: 215 20% 90%;
+    --light-card: 0 0% 100%;
+
+    /* Success / green for analytics */
+    --success: 152 60% 45%;
+    --success-light: 152 50% 92%;
+
     --sidebar-background: 215 25% 8%;
     --sidebar-foreground: 210 20% 92%;
     --sidebar-primary: 187 72% 53%;
@@ -65,32 +76,14 @@
   }
 }
 
-/* Floating animation for characters */
-@keyframes float-slow {
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-20px) rotate(3deg); }
+/* Light-themed sections */
+.section-light {
+  background: hsl(var(--light-bg));
+  color: hsl(var(--light-fg));
 }
 
-@keyframes float-medium {
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-14px) rotate(-2deg); }
-}
-
-@keyframes float-fast {
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-10px) rotate(2deg); }
-}
-
-.animate-float-slow {
-  animation: float-slow 6s ease-in-out infinite;
-}
-
-.animate-float-medium {
-  animation: float-medium 4.5s ease-in-out infinite;
-}
-
-.animate-float-fast {
-  animation: float-fast 3.5s ease-in-out infinite;
+.section-light .text-light-muted {
+  color: hsl(var(--light-muted));
 }
 
 /* Glow effects */

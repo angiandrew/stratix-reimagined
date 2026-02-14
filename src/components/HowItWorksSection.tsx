@@ -5,38 +5,33 @@ const steps = [
     icon: Search,
     step: "01",
     title: "Discovery",
-    description:
-      "We map your workflows, understand your pain points, and identify the highest-impact automations.",
+    description: "We map your workflows, understand your pain points, and identify the highest-impact automations.",
   },
   {
     icon: Wrench,
     step: "02",
     title: "Build & Configure",
-    description:
-      "Our team builds your custom AI agents, integrates with your tools, and tests everything thoroughly.",
+    description: "Our team builds your custom AI agents, integrates with your tools, and tests everything thoroughly.",
   },
   {
     icon: Rocket,
     step: "03",
     title: "Launch & Optimize",
-    description:
-      "Go live in days, not months. We continuously monitor and optimize your automations for peak performance.",
+    description: "Go live in days, not months. We continuously monitor and optimize your automations for peak performance.",
   },
 ];
 
 const HowItWorksSection = () => (
-  <section id="how-it-works" className="py-24 relative">
-    {/* Background accent */}
-    <div className="pointer-events-none absolute inset-0">
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[500px] w-[800px] rounded-full bg-primary/3 blur-[120px]" />
-    </div>
-
-    <div className="container mx-auto px-4 relative">
+  <section id="how-it-works" className="section-light py-24">
+    <div className="container mx-auto px-4">
       <div className="text-center mb-16">
-        <h2 className="text-3xl md:text-5xl font-bold mb-4">
+        <span className="inline-block text-xs font-semibold uppercase tracking-widest text-[hsl(var(--primary))] mb-4">
+          Our Process
+        </span>
+        <h2 className="text-3xl md:text-5xl font-bold mb-4" style={{ color: "hsl(var(--light-fg))" }}>
           Live in <span className="text-gradient">days</span>, not months
         </h2>
-        <p className="text-muted-foreground max-w-xl mx-auto">
+        <p className="text-light-muted max-w-xl mx-auto">
           A simple, proven process to get your AI agents up and running fast.
         </p>
       </div>
@@ -45,16 +40,17 @@ const HowItWorksSection = () => (
         {steps.map((s) => (
           <div
             key={s.step}
-            className="relative rounded-2xl border border-border bg-card/40 backdrop-blur-sm p-8 hover:border-primary/30 transition-all duration-300 group"
+            className="relative rounded-2xl border p-8 transition-all duration-300 hover:shadow-lg group"
+            style={{ borderColor: "hsl(var(--light-border))", background: "hsl(var(--light-card))" }}
           >
-            <div className="text-[64px] font-black text-foreground/[0.04] absolute top-4 right-6 leading-none select-none">
+            <div className="text-[64px] font-black absolute top-4 right-6 leading-none select-none" style={{ color: "hsl(215 20% 92%)" }}>
               {s.step}
             </div>
-            <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-colors">
-              <s.icon className="text-primary" size={22} />
+            <div className="h-12 w-12 rounded-xl flex items-center justify-center mb-6 transition-colors" style={{ background: "hsl(187 72% 53% / 0.1)" }}>
+              <s.icon className="text-[hsl(var(--primary))]" size={22} />
             </div>
-            <h3 className="text-lg font-semibold mb-2">{s.title}</h3>
-            <p className="text-sm text-muted-foreground leading-relaxed">{s.description}</p>
+            <h3 className="text-lg font-semibold mb-2" style={{ color: "hsl(var(--light-fg))" }}>{s.title}</h3>
+            <p className="text-sm leading-relaxed text-light-muted">{s.description}</p>
           </div>
         ))}
       </div>
