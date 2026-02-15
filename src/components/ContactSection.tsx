@@ -32,16 +32,16 @@ const ContactSection = () => {
   };
 
   return (
-    <section id="contact" className="section-light py-24">
+    <section id="contact" className="section-light py-16 md:py-24">
       <div className="container mx-auto px-4">
         <div className="max-w-3xl mx-auto text-center">
           <span className="inline-block text-xs font-semibold uppercase tracking-widest text-[hsl(var(--primary))] mb-4">
             Get Started
           </span>
-          <h2 className="text-3xl md:text-5xl font-bold mb-4" style={{ color: "hsl(var(--light-fg))" }}>
+          <h2 className="text-2xl md:text-5xl font-bold mb-4" style={{ color: "hsl(var(--light-fg))" }}>
             Ready to automate your growth?
           </h2>
-          <p className="max-w-xl mx-auto mb-10 text-sm" style={{ color: "hsl(var(--light-muted))" }}>
+          <p className="max-w-xl mx-auto mb-8 md:mb-10 text-sm" style={{ color: "hsl(var(--light-muted))" }}>
             Tell us about your business. We'll map your workflows and ship your first AI agent fast.
           </p>
 

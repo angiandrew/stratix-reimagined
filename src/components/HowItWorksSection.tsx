@@ -22,13 +22,13 @@ const steps = [
 ];
 
 const HowItWorksSection = () => (
-  <section id="how-it-works" className="section-light py-24 border-t" style={{ borderColor: "hsl(var(--light-border))" }}>
+  <section id="how-it-works" className="section-light py-16 md:py-24 border-t" style={{ borderColor: "hsl(var(--light-border))" }}>
     <div className="container mx-auto px-4">
-      <div className="text-center mb-16">
+      <div className="text-center mb-10 md:mb-16">
         <span className="inline-block text-xs font-semibold uppercase tracking-widest text-[hsl(var(--primary))] mb-4">
           Our Process
         </span>
-        <h2 className="text-3xl md:text-5xl font-bold mb-4" style={{ color: "hsl(var(--light-fg))" }}>
+        <h2 className="text-2xl md:text-5xl font-bold mb-4" style={{ color: "hsl(var(--light-fg))" }}>
           Live in days, not months
         </h2>
         <p className="max-w-xl mx-auto text-sm" style={{ color: "hsl(var(--light-muted))" }}>
