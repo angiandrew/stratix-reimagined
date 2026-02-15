@@ -159,7 +159,7 @@ const AgentShowcaseSection = () => {
                     className="rounded-2xl border p-6 text-center"
                     style={{ borderColor: "hsl(var(--light-border))", background: "hsl(var(--light-card))" }}
                   >
-                    <div className="text-2xl md:text-3xl font-black mb-2" style={{ color: "hsl(var(--destructive))" }}>
+                    <div className="text-xl md:text-2xl font-bold mb-2" style={{ color: "hsl(var(--primary))" }}>
                       {stat.value}
                     </div>
                     <p className="text-sm leading-relaxed" style={{ color: "hsl(var(--light-muted))" }}>
