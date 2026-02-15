@@ -29,7 +29,7 @@ const AnimatedContent = ({
   initialOpacity = 0,
   animateOpacity = true,
   scale = 1,
-  threshold = 0.1,
+  threshold = 0.2,
   delay = 0,
   className = "",
 }: AnimatedContentProps) => {
@@ -42,6 +42,7 @@ const AnimatedContent = ({
     const axis = direction === "horizontal" ? "x" : "y";
     const offset = reverse ? -distance : distance;
 
+    // Set initial state
     gsap.set(el, {
       [axis]: offset,
       scale,
@@ -52,15 +53,23 @@ const AnimatedContent = ({
     const tl = gsap.timeline({ paused: true, delay });
     tl.to(el, { [axis]: 0, scale: 1, opacity: 1, duration, ease });
 
-    const st = ScrollTrigger.create({
-      trigger: el,
-      start: `top ${(1 - threshold) * 100}%`,
-      once: true,
-      onEnter: () => tl.play(),
-    });
+    // Use IntersectionObserver as fallback for iframe contexts
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            tl.play();
+            observer.disconnect();
+          }
+        });
+      },
+      { threshold: threshold, rootMargin: "0px 0px -10% 0px" }
+    );
+
+    observer.observe(el);
 
     return () => {
-      st.kill();
+      observer.disconnect();
       tl.kill();
     };
   }, [distance, direction, reverse, duration, ease, initialOpacity, animateOpacity, scale, threshold, delay]);
