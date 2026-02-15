@@ -1,9 +1,35 @@
 import { useState } from "react";
-import { ArrowRight, Mail, Phone, MapPin } from "lucide-react";
+import { ArrowRight, Mail, Phone, MapPin, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const ContactSection = () => {
   const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+  const { toast } = useToast();
+
+  const handleSubmit = async () => {
+    const trimmed = email.trim();
+    if (!trimmed || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)) {
+      toast({ title: "Please enter a valid email address", variant: "destructive" });
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("send-demo-request", {
+        body: { email: trimmed, source: "contact" },
+      });
+      if (error) throw error;
+      toast({ title: "Thanks! We'll be in touch shortly." });
+      setEmail("");
+    } catch {
+      toast({ title: "Something went wrong. Please try again.", variant: "destructive" });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <section id="contact" className="section-light py-24">
@@ -19,7 +45,6 @@ const ContactSection = () => {
             Tell us about your business. We'll map your workflows and ship your first AI agent fast.
           </p>
 
-          {/* Email CTA */}
           <div className="flex flex-col sm:flex-row gap-3 justify-center max-w-lg mx-auto mb-12">
             <input
               type="email"
@@ -32,25 +57,19 @@ const ContactSection = () => {
                 color: "hsl(var(--light-fg))",
                 background: "hsl(var(--light-card))",
               }}
+              onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
             />
-            <Button size="lg" className="text-sm font-semibold gap-2 shrink-0">
-              Book a Demo <ArrowRight size={16} />
+            <Button size="lg" className="text-sm font-semibold gap-2 shrink-0" onClick={handleSubmit} disabled={loading}>
+              {loading ? <Loader2 size={16} className="animate-spin" /> : <>Book a Demo <ArrowRight size={16} /></>}
             </Button>
           </div>
 
-          {/* Contact details */}
           <div className="flex flex-col sm:flex-row justify-center gap-8 text-sm" style={{ color: "hsl(var(--light-muted))" }}>
-            <a
-              href="mailto:contact@stratixos.com"
-              className="flex items-center gap-2 hover:text-[hsl(var(--light-fg))] transition-colors"
-            >
+            <a href="mailto:contact@stratixos.com" className="flex items-center gap-2 hover:text-[hsl(var(--light-fg))] transition-colors">
               <Mail size={16} className="text-[hsl(var(--primary))]" />
               contact@stratixos.com
             </a>
-            <a
-              href="tel:+17725385517"
-              className="flex items-center gap-2 hover:text-[hsl(var(--light-fg))] transition-colors"
-            >
+            <a href="tel:+17725385517" className="flex items-center gap-2 hover:text-[hsl(var(--light-fg))] transition-colors">
               <Phone size={16} className="text-[hsl(var(--primary))]" />
               (772) 538-5517
             </a>

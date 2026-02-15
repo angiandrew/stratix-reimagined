@@ -1,10 +1,36 @@
 import { useState } from "react";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ParticleNetwork from "@/components/ParticleNetwork";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const HeroSection = () => {
   const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+  const { toast } = useToast();
+
+  const handleSubmit = async () => {
+    const trimmed = email.trim();
+    if (!trimmed || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)) {
+      toast({ title: "Please enter a valid email address", variant: "destructive" });
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("send-demo-request", {
+        body: { email: trimmed, source: "hero" },
+      });
+      if (error) throw error;
+      toast({ title: "Thanks! We'll be in touch shortly." });
+      setEmail("");
+    } catch {
+      toast({ title: "Something went wrong. Please try again.", variant: "destructive" });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
@@ -39,9 +65,10 @@ const HeroSection = () => {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter your email"
               className="flex-1 rounded-lg border border-border bg-secondary/60 px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 backdrop-blur-sm"
+              onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
             />
-            <Button size="lg" className="text-sm font-semibold gap-2 shrink-0">
-              Book a Demo <ArrowRight size={16} />
+            <Button size="lg" className="text-sm font-semibold gap-2 shrink-0" onClick={handleSubmit} disabled={loading}>
+              {loading ? <Loader2 size={16} className="animate-spin" /> : <>Book a Demo <ArrowRight size={16} /></>}
             </Button>
           </div>
 
