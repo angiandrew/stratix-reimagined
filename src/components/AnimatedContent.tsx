@@ -54,7 +54,12 @@ const AnimatedContent = ({
               ease,
               delay,
             });
-            observer.disconnect();
+          } else {
+            gsap.set(el, {
+              [axis]: offset,
+              scale,
+              opacity: initialOpacity,
+            });
           }
         });
       },
