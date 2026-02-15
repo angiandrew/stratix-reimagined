@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Phone, Globe, FileText, Share2, PhoneOutgoing, ArrowRight, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import SavingsCalculator from "@/components/SavingsCalculator";
+import AnimatedContent from "@/components/AnimatedContent";
 
 const agents = [
   {
@@ -110,18 +111,19 @@ const AgentShowcaseSection = () => {
   return (
     <section id="popular-agents" className="section-light py-16 md:py-24 border-t" style={{ borderColor: "hsl(var(--light-border))" }}>
       <div className="container mx-auto px-4">
-        {/* Header */}
-        <div className="text-center mb-8 md:mb-12">
-          <span className="inline-block text-xs font-semibold uppercase tracking-widest text-[hsl(var(--primary))] mb-4">
-            Popular Agents
-          </span>
-          <h2 className="text-2xl md:text-5xl font-bold mb-4" style={{ color: "hsl(var(--light-fg))" }}>
-            Purpose-built AI that drives results
-          </h2>
-          <p className="text-light-muted max-w-2xl mx-auto text-sm md:text-base">
-            Each agent is fully customizable and integrates seamlessly with your existing tools.
-          </p>
-        </div>
+        <AnimatedContent distance={30}>
+          <div className="text-center mb-8 md:mb-12">
+            <span className="inline-block text-xs font-semibold uppercase tracking-widest text-[hsl(var(--primary))] mb-4">
+              Popular Agents
+            </span>
+            <h2 className="text-2xl md:text-5xl font-bold mb-4" style={{ color: "hsl(var(--light-fg))" }}>
+              Purpose-built AI that drives results
+            </h2>
+            <p className="text-light-muted max-w-2xl mx-auto text-sm md:text-base">
+              Each agent is fully customizable and integrates seamlessly with your existing tools.
+            </p>
+          </div>
+        </AnimatedContent>
 
         {/* Toggle pills - horizontal scroll on mobile */}
         <div className="flex justify-center mb-10 md:mb-16">
