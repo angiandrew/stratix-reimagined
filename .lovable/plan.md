@@ -1,55 +1,70 @@
 
 
-# StratixOS Website Redesign
+## Overview
 
-## Design Vision
-A sleek, dark-themed website with an **animated particle network** (floating dots connected by lines/strings) as the hero background — creating that futuristic, AI-powered feel. Clean typography, cyan/blue accent colors matching your current brand.
+Two changes to the site:
 
----
+1. **Tone down the stat cards** in the Popular Agents section -- reduce the font size and switch from bright red to a subtler color so they feel informative rather than alarming.
 
-## Page Structure
-
-### 1. Navigation Bar
-- StratixOS logo (your uploaded hexagon logo) + wordmark
-- Links: Services, How It Works, Why Us, Contact
-- "Get Started" CTA button with cyan accent
-
-### 2. Hero Section (Full-screen with animated background)
-- **Animated particle/constellation network** filling the entire viewport — dots floating and connecting with lines as they move, reacting subtly to mouse movement
-- Bold headline: "Never Miss a Lead Again"
-- Subheadline about AI agents working 24/7
-- Two CTA buttons: "Start Your AI Journey" + "Watch Demo"
-- Key stats row: 391% Lead Conversion | 24/7 Active | 0 Missed Calls
-
-### 3. AI Agents Section
-- Two cards side by side:
-  - **AI Inbound Receptionist** — answers calls 24/7, captures leads
-  - **AI Appointment Booker** — website chatbot that books meetings
-- Each with feature bullet points and subtle hover animations
-
-### 4. How It Works Section
-- 3-step visual flow showing the simple setup process
-- Clean icons with step descriptions
-
-### 5. Why Choose StratixOS Section
-- Three feature cards: Zero Missed Calls, 391% More Leads, 24/7 Availability
-- Subtle fade-in animations on scroll
-
-### 6. Contact / CTA Section
-- Contact form with name, email, message
-- Contact details: email, phone, location (Miami, FL)
-- Final bold CTA to get started
-
-### 7. Footer
-- Logo, links, copyright
+2. **Make "Book a Demo" functional** -- when a visitor enters their email and clicks "Book a Demo" (in the hero or contact section), send you an email notification at contact@stratixos.com with the visitor's details.
 
 ---
 
-## Design Details
-- **Color scheme**: Dark background (#0a0a0a), cyan/teal accents, white text
-- **Particle animation**: Built with HTML Canvas — floating nodes with connecting lines, mouse interaction
-- **Typography**: Clean sans-serif, large bold headings
-- **Animations**: Scroll-triggered fade-ins, hover effects on cards
-- **Fully responsive**: Mobile-friendly layout
-- **No backend needed**: Static site with mailto/link for contact
+## 1. Stat Cards Styling Fix
+
+In `AgentShowcaseSection.tsx`, the stat values (e.g. "$126,000+", "Up to 85%") currently use:
+- `text-2xl md:text-3xl font-black` sizing
+- `color: hsl(var(--destructive))` (bright red)
+
+Changes:
+- Reduce to `text-xl md:text-2xl font-bold`
+- Change color from destructive red to the primary teal: `color: hsl(var(--primary))`
+- This keeps them emphasized but in a way that's consistent with the brand and not jarring
+
+---
+
+## 2. "Book a Demo" Email Notification
+
+Since there's no backend connected yet, we need to set up Lovable Cloud to handle this.
+
+### Step 1: Enable Lovable Cloud
+Connect the project to Lovable Cloud so we can create an edge function and store secrets.
+
+### Step 2: Create a Supabase Edge Function
+Build an edge function (`send-demo-request`) that:
+- Receives the visitor's email via POST
+- Validates the email format using zod
+- Sends a notification email to contact@stratixos.com using the Resend API (a simple email sending service)
+- Returns a success/error response
+
+### Step 3: Set Up Resend
+You'll need a free Resend account (resend.com) to send emails. We'll store the API key as a secret. Resend's free tier allows 100 emails/day which is plenty for demo requests.
+
+### Step 4: Update Frontend Components
+- **HeroSection.tsx**: Add form submission handler that calls the edge function, shows a loading state on the button, and displays a success toast ("We'll be in touch shortly!")
+- **ContactSection.tsx**: Same treatment for the bottom CTA
+- Add email validation before submission (no empty/invalid emails)
+- Disable the button while submitting to prevent double-clicks
+
+### Email Content
+The notification email to you would include:
+- Subject: "New Demo Request - StratixOS"
+- Visitor's email address
+- Timestamp
+- Which page/section they submitted from (hero vs contact)
+
+---
+
+## Technical Details
+
+Files to modify:
+- `src/components/AgentShowcaseSection.tsx` -- stat card styling
+- `src/components/HeroSection.tsx` -- form submission logic
+- `src/components/ContactSection.tsx` -- form submission logic
+
+Files to create:
+- `supabase/functions/send-demo-request/index.ts` -- edge function
+
+Secrets needed:
+- `RESEND_API_KEY` -- for sending emails via Resend
 
