@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import logo from "@/assets/stratixos-logo.png";
 
 const links = [
-  { label: "Services", href: "#services" },
+  { label: "Services", href: "#popular-agents" },
   { label: "How It Works", href: "#how-it-works" },
   { label: "Results", href: "#results" },
   { label: "Contact", href: "#contact" },
