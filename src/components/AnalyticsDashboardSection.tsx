@@ -4,16 +4,16 @@ const miniChartPath = "M0,40 Q15,35 30,28 T60,20 T90,15 T120,8 T150,5 T180,2";
 const miniChartPath2 = "M0,38 Q20,30 40,25 T80,18 T120,10 T160,6 T180,3";
 
 const AnalyticsDashboardSection = () => (
-  <section className="section-light py-24">
+  <section className="section-light py-16 md:py-24 border-t" style={{ borderColor: "hsl(var(--light-border))" }}>
     <div className="container mx-auto px-4">
-      <div className="text-center mb-16">
+      <div className="text-center mb-10 md:mb-16">
         <span className="inline-block text-xs font-semibold uppercase tracking-widest text-[hsl(var(--primary))] mb-4">
           Transparency & Analytics
         </span>
-        <h2 className="text-3xl md:text-5xl font-bold mb-4" style={{ color: "hsl(var(--light-fg))" }}>
+        <h2 className="text-2xl md:text-5xl font-bold mb-4" style={{ color: "hsl(var(--light-fg))" }}>
           Insights that drive decisions
         </h2>
-        <p className="text-light-muted max-w-xl mx-auto">
+        <p className="text-light-muted max-w-xl mx-auto text-sm md:text-base">
           Real-time dashboards and AI-generated insights so you always know what's working.
         </p>
       </div>
@@ -36,13 +36,13 @@ const AnalyticsDashboardSection = () => (
             { label: "Conversion Rate", value: "34.2%", change: "+8.4%", icon: TrendingUp },
             { label: "Revenue Impact", value: "$184K", change: "+41%", icon: BarChart3 },
           ].map((stat) => (
-            <div key={stat.label} className="p-6" style={{ background: "hsl(var(--light-card))" }}>
-              <div className="flex items-center gap-2 mb-2">
-                <stat.icon size={16} className="text-light-muted" style={{ color: "hsl(var(--light-muted))" }} />
-                <span className="text-xs text-light-muted">{stat.label}</span>
+            <div key={stat.label} className="p-3 md:p-6" style={{ background: "hsl(var(--light-card))" }}>
+              <div className="flex items-center gap-1.5 md:gap-2 mb-1 md:mb-2">
+                <stat.icon size={14} className="text-light-muted md:w-4 md:h-4" style={{ color: "hsl(var(--light-muted))" }} />
+                <span className="text-[10px] md:text-xs text-light-muted">{stat.label}</span>
               </div>
-              <div className="text-2xl font-bold" style={{ color: "hsl(var(--light-fg))" }}>{stat.value}</div>
-              <span className="text-xs font-medium" style={{ color: "hsl(var(--success))" }}>{stat.change}</span>
+              <div className="text-lg md:text-2xl font-bold" style={{ color: "hsl(var(--light-fg))" }}>{stat.value}</div>
+              <span className="text-[10px] md:text-xs font-medium" style={{ color: "hsl(var(--success))" }}>{stat.change}</span>
             </div>
           ))}
         </div>

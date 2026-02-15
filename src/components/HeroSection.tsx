@@ -47,7 +47,7 @@ const HeroSection = () => {
             AI-powered automation for progressive organizations
           </div>
 
-          <h1 className="text-5xl sm:text-6xl md:text-8xl font-extrabold tracking-tight mb-6 leading-[1.05]">
+          <h1 className="text-4xl sm:text-6xl md:text-8xl font-extrabold tracking-tight mb-6 leading-[1.05]">
             Growing smarter{" "}
             <br className="hidden sm:block" />
             with <span className="text-gradient">AI</span>
@@ -73,7 +73,7 @@ const HeroSection = () => {
           </div>
 
           <a
-            href="#services"
+            href="#popular-agents"
             className="text-sm text-muted-foreground hover:text-foreground transition-colors underline underline-offset-4 decoration-border hover:decoration-foreground"
           >
             Explore our services →

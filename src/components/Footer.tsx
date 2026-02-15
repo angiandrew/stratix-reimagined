@@ -9,8 +9,8 @@ const Footer = () => (
           Stratix<span className="text-[hsl(var(--primary))]">OS</span>
         </span>
       </div>
-      <div className="flex gap-6 text-sm" style={{ color: "hsl(var(--light-muted))" }}>
-        <a href="#services" className="hover:text-[hsl(var(--light-fg))] transition-colors">Services</a>
+      <div className="flex flex-wrap justify-center gap-4 md:gap-6 text-sm" style={{ color: "hsl(var(--light-muted))" }}>
+        <a href="#popular-agents" className="hover:text-[hsl(var(--light-fg))] transition-colors">Services</a>
         <a href="#how-it-works" className="hover:text-[hsl(var(--light-fg))] transition-colors">How It Works</a>
         <a href="#results" className="hover:text-[hsl(var(--light-fg))] transition-colors">Results</a>
         <a href="#contact" className="hover:text-[hsl(var(--light-fg))] transition-colors">Contact</a>
