@@ -19,6 +19,7 @@ const agents = [
       "Sends detailed lead summaries via text/email",
     ],
     hasCalculator: true,
+    statsColor: "destructive" as const,
     stats: [
       { value: "$126,000+", label: "Average annual revenue lost by small businesses due to missed calls." },
       { value: "Up to 85%", label: "Of callers won't call back or leave a voicemail. They move to a competitor." },
@@ -41,6 +42,7 @@ const agents = [
       "Provides call transcripts and lead scores",
     ],
     hasCalculator: false,
+    statsColor: "destructive" as const,
     stats: [
       { value: "30-50%", label: "Higher conversion rates compared to traditional cold calling." },
       { value: "Up to 40%", label: "Higher response rates by calling leads at the perfect time with instant follow-ups." },
@@ -99,7 +101,12 @@ const agents = [
       "Reports engagement metrics weekly",
     ],
     hasCalculator: false,
-    stats: null,
+    statsColor: "success" as const,
+    stats: [
+      { value: "100×", label: "More likely to get a response when engaging through social media vs. traditional outreach." },
+      { value: "21×", label: "More likely to convert into a sale or booked appointment with consistent social presence." },
+      { value: "60%", label: "Of consumers discover new products and services through social media platforms." },
+    ],
     statsCta: null,
   },
 ];
@@ -161,7 +168,7 @@ const AgentShowcaseSection = () => {
                     className="rounded-2xl border p-4 md:p-6 text-center"
                     style={{ borderColor: "hsl(var(--light-border))", background: "hsl(var(--light-card))" }}
                   >
-                    <div className="text-xl md:text-3xl font-black mb-1 md:mb-2" style={{ color: "hsl(var(--destructive))" }}>
+                    <div className="text-xl md:text-3xl font-black mb-1 md:mb-2" style={{ color: `hsl(var(--${active.statsColor || 'destructive'}))` }}>
                       {stat.value}
                     </div>
                     <p className="text-xs md:text-sm leading-relaxed" style={{ color: "hsl(var(--light-muted))" }}>
