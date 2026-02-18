@@ -1,13 +1,15 @@
 
 
-## Update "Services" Nav Link Target
+## Update Browser Tab Icon (Favicon)
 
-The "Services" link in the navbar currently points to `#services`, but the user wants it to scroll to the "Popular Agents" section instead.
+The "grey globe" you're seeing in the browser tab is the default favicon. We'll replace it with your StratixOS hexagonal logo so it shows your brand icon in browser tabs, Google search results, and bookmarks.
 
-### Changes
+### What will change
+- Copy your uploaded logo to the project's public folder
+- Update the HTML to reference your logo as the site's favicon
+- The new icon will appear in browser tabs and search results
 
-**`src/components/Navbar.tsx`**
-- Change the `href` for "Services" from `#services` to `#popular-agents` (which is the existing `id` on the AgentShowcaseSection)
-
-That single line change will make clicking "Services" scroll directly to the Popular Agents showcase.
+### Technical details
+1. Copy `user-uploads://StratixOS_logo_copy-2.png` to `public/favicon.png`
+2. Update `index.html` to add a `<link rel="icon" href="/favicon.png" type="image/png">` tag in the `<head>`
 
