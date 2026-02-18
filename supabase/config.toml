@@ -1,1 +1,7 @@
 project_id = "kmfmmzzesavsfinoitrj"
+
+[functions.send-demo-request]
+verify_jwt = false
+
+[functions.call-report]
+verify_jwt = false
