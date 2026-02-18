@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, LogIn } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/hooks/useAuth";
 import logo from "@/assets/stratixos-logo.png";
 
 const links = [
@@ -12,6 +13,7 @@ const links = [
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
+  const { user } = useAuth();
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 border-b border-border bg-background/70 backdrop-blur-xl">
@@ -33,9 +35,20 @@ const Navbar = () => {
               {l.label}
             </a>
           ))}
-          <Button size="sm" asChild>
-            <a href="#contact">Book a Demo</a>
-          </Button>
+          {user ? (
+            <Button size="sm" asChild>
+              <a href="/dashboard">Dashboard</a>
+            </Button>
+          ) : (
+            <>
+              <Button size="sm" variant="ghost" asChild>
+                <a href="/auth">Log In</a>
+              </Button>
+              <Button size="sm" asChild>
+                <a href="/auth">Sign Up</a>
+              </Button>
+            </>
+          )}
         </div>
 
         <button className="md:hidden text-foreground" onClick={() => setOpen(!open)}>
@@ -55,9 +68,20 @@ const Navbar = () => {
               {l.label}
             </a>
           ))}
-          <Button size="sm" className="mt-2 w-full" asChild>
-            <a href="#contact" onClick={() => setOpen(false)}>Book a Demo</a>
-          </Button>
+          {user ? (
+            <Button size="sm" className="mt-2 w-full" asChild>
+              <a href="/dashboard" onClick={() => setOpen(false)}>Dashboard</a>
+            </Button>
+          ) : (
+            <>
+              <Button size="sm" variant="ghost" className="mt-2 w-full" asChild>
+                <a href="/auth" onClick={() => setOpen(false)}>Log In</a>
+              </Button>
+              <Button size="sm" className="mt-1 w-full" asChild>
+                <a href="/auth" onClick={() => setOpen(false)}>Sign Up</a>
+              </Button>
+            </>
+          )}
         </div>
       )}
     </nav>
