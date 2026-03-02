@@ -34,6 +34,7 @@ export type Database = {
       }
       calls: {
         Row: {
+          appointment_booked: boolean
           assistant_name: string | null
           assistant_phone_number: string | null
           call_id: string
@@ -47,8 +48,10 @@ export type Database = {
           start_time: string | null
           transcript: string | null
           user_id: string
+          user_sentiment: string | null
         }
         Insert: {
+          appointment_booked?: boolean
           assistant_name?: string | null
           assistant_phone_number?: string | null
           call_id?: string
@@ -62,8 +65,10 @@ export type Database = {
           start_time?: string | null
           transcript?: string | null
           user_id: string
+          user_sentiment?: string | null
         }
         Update: {
+          appointment_booked?: boolean
           assistant_name?: string | null
           assistant_phone_number?: string | null
           call_id?: string
@@ -77,6 +82,7 @@ export type Database = {
           start_time?: string | null
           transcript?: string | null
           user_id?: string
+          user_sentiment?: string | null
         }
         Relationships: [
           {
