@@ -2,15 +2,17 @@ import { useState, useEffect, useMemo } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { AreaChart, Area, XAxis, YAxis, ResponsiveContainer, Tooltip, PieChart, Pie, Cell, Legend } from "recharts";
+import { AreaChart, Area, XAxis, YAxis, ResponsiveContainer, Tooltip as RechartsTooltip } from "recharts";
 import { Phone, Clock, CalendarCheck, LogOut, User, Shield, FileText } from "lucide-react";
 import { toast } from "sonner";
 import { useNavigate, Link, useSearchParams } from "react-router-dom";
 import stratixLogo from "@/assets/stratixos-logo.png";
+import PeakHoursHeatmap from "@/components/dashboard/PeakHoursHeatmap";
+import SentimentChart from "@/components/dashboard/SentimentChart";
 
 interface Call {
   call_id: string;
@@ -38,7 +40,7 @@ const SENTIMENT_COLORS: Record<string, string> = {
   Positive: "hsl(200, 80%, 55%)",
   Negative: "hsl(250, 60%, 55%)",
   Neutral: "hsl(45, 90%, 55%)",
-  Unknown: "hsl(210, 15%, 70%)",
+  Unknown: "hsl(210, 15%, 65%)",
 };
 
 const Dashboard = () => {
@@ -80,7 +82,6 @@ const Dashboard = () => {
     const { data, error } = await query;
     if (error) {
       toast.error("Failed to load calls");
-      console.error(error);
     } else {
       setCalls((data as Call[]) || []);
     }
@@ -105,14 +106,6 @@ const Dashboard = () => {
     return () => { supabase.removeChannel(channel); };
   }, [dateRange, viewingUserId, user]);
 
-  // ── Metrics ──
-  const metrics = useMemo(() => {
-    const totalCalls = calls.length;
-    const totalDuration = calls.reduce((sum, c) => sum + (c.duration_seconds || 0), 0);
-    const appointmentsBooked = calls.filter((c) => c.appointment_booked).length;
-    return { totalCalls, totalDuration, appointmentsBooked };
-  }, [calls]);
-
   const formatDuration = (seconds: number) => {
     if (seconds < 60) return `${seconds}s`;
     const m = Math.floor(seconds / 60);
@@ -120,51 +113,34 @@ const Dashboard = () => {
     return s > 0 ? `${m}m ${s}s` : `${m}m`;
   };
 
-  // ── Chart data — fill in zero-days so the line flows smoothly ──
+  const metrics = useMemo(() => {
+    const totalCalls = calls.length;
+    const totalDuration = calls.reduce((sum, c) => sum + (c.duration_seconds || 0), 0);
+    const appointmentsBooked = calls.filter((c) => c.appointment_booked).length;
+    return { totalCalls, totalDuration, appointmentsBooked };
+  }, [calls]);
+
   const chartData = useMemo(() => {
     const days = parseInt(dateRange);
     const now = new Date();
     const dateMap: Record<string, number> = {};
-
-    // Seed every day in the range with 0
     for (let i = days - 1; i >= 0; i--) {
       const d = new Date(now);
       d.setDate(d.getDate() - i);
-      const label = d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
-      dateMap[label] = 0;
+      dateMap[d.toLocaleDateString("en-US", { month: "short", day: "numeric" })] = 0;
     }
-
-    // Tally actual calls
     calls.forEach((c) => {
       const label = new Date(c.start_time || c.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric" });
       if (label in dateMap) dateMap[label]++;
     });
-
     return Object.entries(dateMap).map(([date, calls]) => ({ date, calls }));
   }, [calls, dateRange]);
 
-  // ── Sentiment data ──
-  const sentimentData = useMemo(() => {
-    const counts: Record<string, number> = {};
-    calls.forEach((c) => {
-      const s = c.user_sentiment || "Unknown";
-      counts[s] = (counts[s] || 0) + 1;
-    });
-    return Object.entries(counts).map(([name, value]) => ({ name, value }));
-  }, [calls]);
-
-  const handleSignOut = async () => {
-    await signOut();
-    navigate("/auth");
-  };
+  const handleSignOut = async () => { await signOut(); navigate("/auth"); };
 
   const handleClientChange = (value: string) => {
-    if (value === user?.id) {
-      searchParams.delete("user");
-      setSearchParams(searchParams);
-    } else {
-      setSearchParams({ user: value });
-    }
+    if (value === user?.id) { searchParams.delete("user"); setSearchParams(searchParams); }
+    else setSearchParams({ user: value });
   };
 
   const viewingLabel = isAdmin && viewingUserId !== user?.id
@@ -172,58 +148,48 @@ const Dashboard = () => {
     : null;
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background text-foreground">
       {/* Navbar */}
-      <header className="border-b border-border/40 bg-card/50 backdrop-blur-sm sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
-          <Link to="/">
-            <img src={stratixLogo} alt="StratixOS" className="h-8" />
-          </Link>
-          <div className="flex items-center gap-3">
+      <header className="border-b border-border/30 sticky top-0 z-50 bg-background/80 backdrop-blur-md">
+        <div className="max-w-6xl mx-auto px-6 flex items-center justify-between h-14">
+          <Link to="/"><img src={stratixLogo} alt="StratixOS" className="h-7" /></Link>
+          <div className="flex items-center gap-1">
             {isAdmin && (
-              <Button variant="ghost" size="sm" onClick={() => navigate("/admin")} className="gap-2">
-                <Shield className="h-4 w-4" /> Admin
+              <Button variant="ghost" size="sm" onClick={() => navigate("/admin")} className="text-xs gap-1.5 text-muted-foreground hover:text-foreground">
+                <Shield className="h-3.5 w-3.5" /> Admin
               </Button>
             )}
-            <Button variant="ghost" size="sm" onClick={() => navigate("/profile")} className="gap-2">
-              <User className="h-4 w-4" /> Profile
+            <Button variant="ghost" size="sm" onClick={() => navigate("/profile")} className="text-xs gap-1.5 text-muted-foreground hover:text-foreground">
+              <User className="h-3.5 w-3.5" /> Profile
             </Button>
-            <Button variant="ghost" size="sm" onClick={handleSignOut} className="gap-2">
-              <LogOut className="h-4 w-4" /> Sign Out
+            <Button variant="ghost" size="sm" onClick={handleSignOut} className="text-xs gap-1.5 text-muted-foreground hover:text-foreground">
+              <LogOut className="h-3.5 w-3.5" /> Sign Out
             </Button>
           </div>
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
-        {/* Header + controls */}
+      <main className="max-w-6xl mx-auto px-6 py-10 space-y-8">
+        {/* Header */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold">
-              {viewingLabel ? `${viewingLabel}'s Dashboard` : "Dashboard"}
+            <h1 className="text-xl font-semibold tracking-tight">
+              {viewingLabel ? `${viewingLabel}` : "Overview"}
             </h1>
-            <p className="text-muted-foreground text-sm">Your AI agent performance at a glance</p>
+            <p className="text-sm text-muted-foreground mt-0.5">Your AI agent performance</p>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
             {isAdmin && clients.length > 0 && (
               <Select value={viewingUserId || "all"} onValueChange={handleClientChange}>
-                <SelectTrigger className="w-[200px] bg-secondary/50 border-border/30">
-                  <SelectValue placeholder="Select client" />
-                </SelectTrigger>
+                <SelectTrigger className="h-8 w-[180px] text-xs border-border/30 bg-transparent"><SelectValue placeholder="Select client" /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Clients</SelectItem>
-                  {clients.map((c) => (
-                    <SelectItem key={c.id} value={c.id}>
-                      {c.display_name || c.email || c.id.slice(0, 8)}
-                    </SelectItem>
-                  ))}
+                  {clients.map((c) => <SelectItem key={c.id} value={c.id}>{c.display_name || c.email || c.id.slice(0, 8)}</SelectItem>)}
                 </SelectContent>
               </Select>
             )}
             <Select value={dateRange} onValueChange={setDateRange}>
-              <SelectTrigger className="w-[160px] bg-secondary/50 border-border/30">
-                <SelectValue />
-              </SelectTrigger>
+              <SelectTrigger className="h-8 w-[130px] text-xs border-border/30 bg-transparent"><SelectValue /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="7">Last 7 days</SelectItem>
                 <SelectItem value="30">Last 30 days</SelectItem>
@@ -233,152 +199,144 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* Stat cards */}
+        {/* Stat cards — clean, flat */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <StatCard label="Call Counts" sublabel="All agents" value={metrics.totalCalls.toLocaleString()} icon={Phone} />
-          <StatCard label="Call Duration" sublabel="Total" value={formatDuration(metrics.totalDuration)} icon={Clock} />
-          <StatCard label="Appointments Booked" sublabel="From calls" value={metrics.appointmentsBooked.toLocaleString()} icon={CalendarCheck} />
+          {[
+            { label: "Calls", value: metrics.totalCalls.toLocaleString(), icon: Phone },
+            { label: "Total Duration", value: formatDuration(metrics.totalDuration), icon: Clock },
+            { label: "Appointments Booked", value: metrics.appointmentsBooked.toLocaleString(), icon: CalendarCheck },
+          ].map((s) => (
+            <Card key={s.label} className="border-border/10">
+              <CardContent className="p-5">
+                <div className="flex items-center gap-2 mb-3">
+                  <s.icon className="h-4 w-4 text-muted-foreground" />
+                  <span className="text-xs font-medium text-muted-foreground">{s.label}</span>
+                </div>
+                <p className="text-3xl font-semibold tracking-tight">{s.value}</p>
+              </CardContent>
+            </Card>
+          ))}
         </div>
 
-        {/* Charts row */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-          {/* Call volume chart */}
-          <Card className="lg:col-span-2 border-border/20 bg-card/60">
-            <CardHeader className="pb-2">
-              <div className="flex items-center justify-between">
-                <div>
-                  <CardTitle className="text-sm font-semibold">Call Counts</CardTitle>
-                  <p className="text-xs text-muted-foreground">All agents</p>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="h-64">
-                {chartData.length > 0 ? (
-                  <ResponsiveContainer width="100%" height="100%">
-                    <AreaChart data={chartData}>
-                      <defs>
-                        <linearGradient id="callGrad" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="0%" stopColor="hsl(220, 70%, 55%)" stopOpacity={0.15} />
-                          <stop offset="100%" stopColor="hsl(220, 70%, 55%)" stopOpacity={0} />
-                        </linearGradient>
-                      </defs>
-                      <XAxis dataKey="date" tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 11 }} axisLine={false} tickLine={false} />
-                      <YAxis tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 11 }} axisLine={false} tickLine={false} allowDecimals={false} />
-                      <Tooltip contentStyle={{ backgroundColor: "hsl(var(--card))", border: "1px solid hsl(var(--border))", borderRadius: "6px", color: "hsl(var(--foreground))", fontSize: 12 }} />
-                      <Area type="monotone" dataKey="calls" stroke="hsl(220, 70%, 55%)" fill="url(#callGrad)" strokeWidth={2} name="Call counts" />
-                    </AreaChart>
-                  </ResponsiveContainer>
-                ) : (
-                  <div className="flex items-center justify-center h-full text-muted-foreground text-sm">No call data yet</div>
-                )}
-              </div>
-            </CardContent>
-          </Card>
+        {/* Call volume chart */}
+        <Card className="border-border/10">
+          <CardContent className="p-5">
+            <div className="mb-4">
+              <h3 className="text-sm font-medium">Call Volume</h3>
+              <p className="text-xs text-muted-foreground">Daily call counts</p>
+            </div>
+            <div className="h-56">
+              {chartData.length > 0 ? (
+                <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart data={chartData}>
+                    <defs>
+                      <linearGradient id="callGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity={0.12} />
+                        <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity={0} />
+                      </linearGradient>
+                    </defs>
+                    <XAxis
+                      dataKey="date"
+                      tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 10 }}
+                      axisLine={false}
+                      tickLine={false}
+                      interval="preserveStartEnd"
+                    />
+                    <YAxis
+                      tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 10 }}
+                      axisLine={false}
+                      tickLine={false}
+                      allowDecimals={false}
+                      width={28}
+                    />
+                    <RechartsTooltip
+                      contentStyle={{
+                        backgroundColor: "hsl(var(--popover))",
+                        border: "1px solid hsl(var(--border))",
+                        borderRadius: "6px",
+                        color: "hsl(var(--popover-foreground))",
+                        fontSize: 12,
+                        boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+                      }}
+                    />
+                    <Area
+                      type="monotone"
+                      dataKey="calls"
+                      stroke="hsl(var(--primary))"
+                      fill="url(#callGrad)"
+                      strokeWidth={1.5}
+                      dot={false}
+                      name="Calls"
+                    />
+                  </AreaChart>
+                </ResponsiveContainer>
+              ) : (
+                <div className="flex items-center justify-center h-full text-muted-foreground text-sm">No data yet</div>
+              )}
+            </div>
+          </CardContent>
+        </Card>
 
-          {/* Sentiment donut */}
-          <Card className="border-border/20 bg-card/60">
-            <CardHeader className="pb-2">
-              <div>
-                <CardTitle className="text-sm font-semibold">User Sentiment</CardTitle>
-                <p className="text-xs text-muted-foreground">All agents</p>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="h-64 flex items-center justify-center">
-                {sentimentData.length > 0 ? (
-                  <ResponsiveContainer width="100%" height="100%">
-                    <PieChart>
-                      <Pie
-                        data={sentimentData}
-                        cx="50%"
-                        cy="45%"
-                        innerRadius={55}
-                        outerRadius={85}
-                        paddingAngle={3}
-                        dataKey="value"
-                      >
-                        {sentimentData.map((entry) => (
-                          <Cell key={entry.name} fill={SENTIMENT_COLORS[entry.name] || SENTIMENT_COLORS.Unknown} />
-                        ))}
-                      </Pie>
-                      <Legend
-                        verticalAlign="bottom"
-                        iconType="circle"
-                        iconSize={8}
-                        formatter={(value: string, entry: any) => {
-                          const item = sentimentData.find((d) => d.name === value);
-                          const total = sentimentData.reduce((s, d) => s + d.value, 0);
-                          const pct = total > 0 ? ((item?.value || 0) / total * 100).toFixed(1) : "0";
-                          return <span className="text-xs text-muted-foreground">{value}: {item?.value} ({pct}%)</span>;
-                        }}
-                      />
-                    </PieChart>
-                  </ResponsiveContainer>
-                ) : (
-                  <p className="text-muted-foreground text-sm">No sentiment data yet</p>
-                )}
-              </div>
-            </CardContent>
-          </Card>
+        {/* Heatmap + Sentiment side by side */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <PeakHoursHeatmap calls={calls} />
+          <SentimentChart calls={calls} />
         </div>
 
         {/* Calls table */}
-        <Card className="border-border/20 bg-card/60">
-          <CardHeader>
-            <CardTitle className="text-sm font-semibold">Recent Calls</CardTitle>
-          </CardHeader>
-          <CardContent>
+        <Card className="border-border/10">
+          <CardContent className="p-5">
+            <h3 className="text-sm font-medium mb-4">Recent Calls</h3>
             {loading ? (
               <div className="flex justify-center py-12">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
+                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary" />
               </div>
             ) : calls.length === 0 ? (
-              <p className="text-center text-muted-foreground py-12">No calls yet. Configure your agent and start receiving calls.</p>
+              <p className="text-center text-muted-foreground py-12 text-sm">No calls yet. Configure your agent to start.</p>
             ) : (
-              <div className="overflow-x-auto">
+              <div className="overflow-x-auto -mx-5">
                 <Table>
                   <TableHeader>
-                    <TableRow className="border-border/10">
-                      <TableHead className="text-xs">Date</TableHead>
-                      <TableHead className="text-xs">Assistant</TableHead>
-                      <TableHead className="text-xs">Customer</TableHead>
-                      <TableHead className="text-xs">Duration</TableHead>
-                      <TableHead className="text-xs">Sentiment</TableHead>
-                      <TableHead className="text-xs">Appt</TableHead>
-                      <TableHead className="text-xs">Reason</TableHead>
-                      <TableHead className="text-xs"></TableHead>
+                    <TableRow className="border-border/10 hover:bg-transparent">
+                      <TableHead className="text-[11px] font-medium text-muted-foreground uppercase tracking-wider pl-5">Date</TableHead>
+                      <TableHead className="text-[11px] font-medium text-muted-foreground uppercase tracking-wider">Agent</TableHead>
+                      <TableHead className="text-[11px] font-medium text-muted-foreground uppercase tracking-wider">Customer</TableHead>
+                      <TableHead className="text-[11px] font-medium text-muted-foreground uppercase tracking-wider">Duration</TableHead>
+                      <TableHead className="text-[11px] font-medium text-muted-foreground uppercase tracking-wider">Sentiment</TableHead>
+                      <TableHead className="text-[11px] font-medium text-muted-foreground uppercase tracking-wider">Appt</TableHead>
+                      <TableHead className="text-[11px] font-medium text-muted-foreground uppercase tracking-wider">Outcome</TableHead>
+                      <TableHead className="text-[11px] pr-5"></TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {calls.map((call) => (
-                      <TableRow key={call.call_id} className="border-border/10 hover:bg-secondary/30 transition-colors">
-                        <TableCell className="text-sm">
+                      <TableRow key={call.call_id} className="border-border/5 hover:bg-muted/30 transition-colors">
+                        <TableCell className="text-sm pl-5 text-muted-foreground">
                           {call.start_time ? new Date(call.start_time).toLocaleString("en-US", { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }) : "—"}
                         </TableCell>
                         <TableCell className="text-sm">{call.assistant_name || "—"}</TableCell>
-                        <TableCell className="text-sm font-mono">{call.customer_phone_number || "—"}</TableCell>
+                        <TableCell className="text-sm font-mono text-muted-foreground">{call.customer_phone_number || "—"}</TableCell>
                         <TableCell className="text-sm">{call.duration_seconds ? formatDuration(call.duration_seconds) : "—"}</TableCell>
                         <TableCell className="text-sm">
                           {call.user_sentiment ? (
                             <span className="inline-flex items-center gap-1.5">
-                              <span className="h-2 w-2 rounded-full" style={{ backgroundColor: SENTIMENT_COLORS[call.user_sentiment] || SENTIMENT_COLORS.Unknown }} />
-                              {call.user_sentiment}
+                              <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: SENTIMENT_COLORS[call.user_sentiment] || SENTIMENT_COLORS.Unknown }} />
+                              <span className="text-muted-foreground">{call.user_sentiment}</span>
                             </span>
-                          ) : "—"}
+                          ) : <span className="text-muted-foreground/50">—</span>}
                         </TableCell>
-                        <TableCell className="text-sm">{call.appointment_booked ? "✓" : "—"}</TableCell>
+                        <TableCell className="text-sm">{call.appointment_booked ? <span className="text-primary">✓</span> : <span className="text-muted-foreground/50">—</span>}</TableCell>
                         <TableCell className="text-sm text-muted-foreground">{call.ended_reason || "—"}</TableCell>
-                        <TableCell>
+                        <TableCell className="pr-5">
                           {call.transcript && (
                             <Dialog>
                               <DialogTrigger asChild>
-                                <Button variant="ghost" size="sm"><FileText className="h-4 w-4" /></Button>
+                                <Button variant="ghost" size="sm" className="h-7 w-7 p-0 text-muted-foreground hover:text-foreground">
+                                  <FileText className="h-3.5 w-3.5" />
+                                </Button>
                               </DialogTrigger>
                               <DialogContent className="max-w-2xl max-h-[70vh] overflow-y-auto">
-                                <DialogHeader>
-                                  <DialogTitle>Call Transcript</DialogTitle>
-                                </DialogHeader>
+                                <DialogHeader><DialogTitle>Call Transcript</DialogTitle></DialogHeader>
                                 <pre className="whitespace-pre-wrap text-sm text-muted-foreground leading-relaxed">{call.transcript}</pre>
                               </DialogContent>
                             </Dialog>
@@ -396,21 +354,5 @@ const Dashboard = () => {
     </div>
   );
 };
-
-// ── Stat Card ──
-function StatCard({ label, sublabel, value, icon: Icon }: { label: string; sublabel: string; value: string; icon: React.ElementType }) {
-  return (
-    <Card className="border-border/20 bg-card/60">
-      <CardContent className="p-5">
-        <div className="flex items-center gap-1.5 mb-1">
-          <Icon className="h-3.5 w-3.5 text-muted-foreground" />
-          <span className="text-xs font-medium text-foreground">{label}</span>
-        </div>
-        <p className="text-xs text-muted-foreground mb-2">{sublabel}</p>
-        <p className="text-3xl font-bold tracking-tight">{value}</p>
-      </CardContent>
-    </Card>
-  );
-}
 
 export default Dashboard;
