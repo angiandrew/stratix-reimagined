@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { toast } from "sonner";
-import { ArrowLeft, Save, Eye, EyeOff, CheckCircle2 } from "lucide-react";
+import { ArrowLeft, Save, Eye, EyeOff, CheckCircle2, LayoutDashboard } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
 import stratixLogo from "@/assets/stratixos-logo.png";
 
@@ -228,9 +228,12 @@ const Admin = () => {
                             placeholder="agent_xxxxxxxx"
                           />
                         </TableCell>
-                        <TableCell>
+                        <TableCell className="flex items-center gap-1">
                           <Button size="sm" variant="ghost" onClick={() => handleSaveOrg(profile.id)}>
                             <Save className="h-4 w-4" />
+                          </Button>
+                          <Button size="sm" variant="ghost" onClick={() => navigate(`/dashboard?user=${profile.id}`)} title="View dashboard">
+                            <LayoutDashboard className="h-4 w-4" />
                           </Button>
                         </TableCell>
                       </TableRow>

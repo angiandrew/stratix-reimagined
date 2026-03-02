@@ -9,11 +9,12 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Tooltip, AreaChart, Area } from "recharts";
 import { Phone, Clock, DollarSign, TrendingUp, LogOut, User, Shield, FileText } from "lucide-react";
 import { toast } from "sonner";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useSearchParams } from "react-router-dom";
 import stratixLogo from "@/assets/stratixos-logo.png";
 
 interface Call {
   call_id: string;
+  user_id: string;
   assistant_name: string | null;
   customer_phone_number: string | null;
   transcript: string | null;
@@ -25,23 +26,52 @@ interface Call {
   created_at: string;
 }
 
+interface ClientOption {
+  id: string;
+  email: string | null;
+  display_name: string | null;
+}
+
 const Dashboard = () => {
   const { user, signOut, isAdmin } = useAuth();
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [calls, setCalls] = useState<Call[]>([]);
   const [loading, setLoading] = useState(true);
   const [dateRange, setDateRange] = useState("30");
+
+  // Admin client switching
+  const [clients, setClients] = useState<ClientOption[]>([]);
+  const viewingUserId = searchParams.get("user") || user?.id || "";
+  const viewingClient = clients.find((c) => c.id === viewingUserId);
+
+  // Fetch clients list for admin
+  useEffect(() => {
+    if (!isAdmin) return;
+    const fetchClients = async () => {
+      const { data } = await supabase.from("profiles").select("id, email, display_name");
+      if (data) setClients(data);
+    };
+    fetchClients();
+  }, [isAdmin]);
 
   const fetchCalls = async () => {
     setLoading(true);
     const daysAgo = new Date();
     daysAgo.setDate(daysAgo.getDate() - parseInt(dateRange));
 
-    const { data, error } = await supabase
+    let query = supabase
       .from("calls")
       .select("*")
       .gte("created_at", daysAgo.toISOString())
       .order("created_at", { ascending: false });
+
+    // If admin is viewing a specific client, filter by their user_id
+    if (isAdmin && viewingUserId && viewingUserId !== "all") {
+      query = query.eq("user_id", viewingUserId);
+    }
+
+    const { data, error } = await query;
 
     if (error) {
       toast.error("Failed to load calls");
@@ -53,18 +83,23 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
+    if (!user) return;
     fetchCalls();
 
     const channel = supabase
       .channel("calls-realtime")
       .on("postgres_changes", { event: "INSERT", schema: "public", table: "calls" }, (payload) => {
-        setCalls((prev) => [payload.new as Call, ...prev]);
-        toast.success("New call received!");
+        const newCall = payload.new as Call;
+        // Only add if it matches current view
+        if (!isAdmin || viewingUserId === "all" || newCall.user_id === viewingUserId) {
+          setCalls((prev) => [newCall, ...prev]);
+          toast.success("New call received!");
+        }
       })
       .subscribe();
 
     return () => { supabase.removeChannel(channel); };
-  }, [dateRange]);
+  }, [dateRange, viewingUserId, user]);
 
   const metrics = useMemo(() => {
     const totalMinutes = calls.reduce((sum, c) => sum + (c.duration_seconds || 0), 0) / 60;
@@ -90,12 +125,25 @@ const Dashboard = () => {
     navigate("/auth");
   };
 
+  const handleClientChange = (value: string) => {
+    if (value === user?.id) {
+      searchParams.delete("user");
+      setSearchParams(searchParams);
+    } else {
+      setSearchParams({ user: value });
+    }
+  };
+
   const statCards = [
     { title: "Total Call Minutes", value: metrics.totalMinutes.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }), icon: Clock, color: "text-emerald-400", bg: "bg-emerald-500/10", dataKey: "minutes" },
     { title: "Number of Calls", value: metrics.totalCalls.toLocaleString(), icon: Phone, color: "text-orange-400", bg: "bg-orange-500/10", dataKey: "calls" },
     { title: "Total Spent", value: `$${metrics.totalCost.toFixed(2)}`, icon: DollarSign, color: "text-purple-400", bg: "bg-purple-500/10", dataKey: "cost" },
     { title: "Avg Cost / Call", value: `$${metrics.avgCost.toFixed(2)}`, icon: TrendingUp, color: "text-blue-400", bg: "bg-blue-500/10", dataKey: "cost" },
   ];
+
+  const viewingLabel = isAdmin && viewingUserId !== user?.id
+    ? viewingClient?.display_name || viewingClient?.email || "All Clients"
+    : null;
 
   return (
     <div className="min-h-screen bg-background">
@@ -125,19 +173,39 @@ const Dashboard = () => {
         {/* Header */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold">Call Dashboard</h1>
+            <h1 className="text-2xl font-bold">
+              {viewingLabel ? `${viewingLabel}'s Dashboard` : "Call Dashboard"}
+            </h1>
             <p className="text-muted-foreground text-sm">Track your AI agent call performance</p>
           </div>
-          <Select value={dateRange} onValueChange={setDateRange}>
-            <SelectTrigger className="w-[180px] bg-secondary/50 border-border/30">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="7">Last 7 days</SelectItem>
-              <SelectItem value="30">Last 30 days</SelectItem>
-              <SelectItem value="90">Last 90 days</SelectItem>
-            </SelectContent>
-          </Select>
+          <div className="flex items-center gap-3">
+            {/* Admin client selector */}
+            {isAdmin && clients.length > 0 && (
+              <Select value={viewingUserId || "all"} onValueChange={handleClientChange}>
+                <SelectTrigger className="w-[200px] bg-secondary/50 border-border/30">
+                  <SelectValue placeholder="Select client" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Clients</SelectItem>
+                  {clients.map((c) => (
+                    <SelectItem key={c.id} value={c.id}>
+                      {c.display_name || c.email || c.id.slice(0, 8)}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
+            <Select value={dateRange} onValueChange={setDateRange}>
+              <SelectTrigger className="w-[180px] bg-secondary/50 border-border/30">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="7">Last 7 days</SelectItem>
+                <SelectItem value="30">Last 30 days</SelectItem>
+                <SelectItem value="90">Last 90 days</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
 
         {/* Stats Grid */}
@@ -200,7 +268,7 @@ const Dashboard = () => {
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
               </div>
             ) : calls.length === 0 ? (
-              <p className="text-center text-muted-foreground py-12">No calls yet. Set your Org ID in your profile and start receiving calls.</p>
+              <p className="text-center text-muted-foreground py-12">No calls yet. Set your Retell Agent ID in your profile and start receiving calls.</p>
             ) : (
               <div className="overflow-x-auto">
                 <Table>
