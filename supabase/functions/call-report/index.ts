@@ -137,8 +137,17 @@ Deno.serve(async (req) => {
       );
     }
 
-    // Extract sentiment from Retell's call_analysis
-    const sentiment = call.call_analysis?.user_sentiment || null;
+    // Log the full call object to discover sentiment field path
+    console.log("Retell call keys:", JSON.stringify(Object.keys(call)));
+    console.log("call_analysis:", JSON.stringify(call.call_analysis));
+    console.log("analysis:", JSON.stringify(call.analysis));
+
+    // Extract sentiment - try multiple possible paths
+    const sentiment = call.call_analysis?.user_sentiment
+      || call.analysis?.user_sentiment
+      || call.call_analysis?.sentiment
+      || call.analysis?.sentiment
+      || null;
 
     // Detect appointment from transcript
     const transcript = call.transcript || null;
