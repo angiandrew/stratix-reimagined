@@ -35,20 +35,14 @@ const Navbar = () => {
               {l.label}
             </a>
           ))}
-          {user ? (
-            <Button size="sm" asChild>
-              <a href="/dashboard">Dashboard</a>
-            </Button>
-          ) : (
-            <>
-              <Button size="sm" variant="ghost" asChild>
-                <a href="/auth">Log In</a>
-              </Button>
-              <Button size="sm" asChild>
-                <a href="/auth">Sign Up</a>
-              </Button>
-            </>
-          )}
+          <Button size="sm" variant="ghost" asChild>
+            <a href={user ? "/dashboard" : "/auth"}>Log In</a>
+          </Button>
+          <Button size="sm" asChild>
+            <a href={user ? "/dashboard" : "/auth"}>
+              {user ? "Dashboard" : "Sign Up"}
+            </a>
+          </Button>
         </div>
 
         <button className="md:hidden text-foreground" onClick={() => setOpen(!open)}>
@@ -68,20 +62,14 @@ const Navbar = () => {
               {l.label}
             </a>
           ))}
-          {user ? (
-            <Button size="sm" className="mt-2 w-full" asChild>
-              <a href="/dashboard" onClick={() => setOpen(false)}>Dashboard</a>
-            </Button>
-          ) : (
-            <>
-              <Button size="sm" variant="ghost" className="mt-2 w-full" asChild>
-                <a href="/auth" onClick={() => setOpen(false)}>Log In</a>
-              </Button>
-              <Button size="sm" className="mt-1 w-full" asChild>
-                <a href="/auth" onClick={() => setOpen(false)}>Sign Up</a>
-              </Button>
-            </>
-          )}
+          <Button size="sm" variant="ghost" className="mt-2 w-full" asChild>
+            <a href={user ? "/dashboard" : "/auth"} onClick={() => setOpen(false)}>Log In</a>
+          </Button>
+          <Button size="sm" className="mt-1 w-full" asChild>
+            <a href={user ? "/dashboard" : "/auth"} onClick={() => setOpen(false)}>
+              {user ? "Dashboard" : "Sign Up"}
+            </a>
+          </Button>
         </div>
       )}
     </nav>
