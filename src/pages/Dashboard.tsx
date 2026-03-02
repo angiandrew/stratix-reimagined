@@ -120,16 +120,28 @@ const Dashboard = () => {
     return s > 0 ? `${m}m ${s}s` : `${m}m`;
   };
 
-  // ── Chart data ──
+  // ── Chart data — fill in zero-days so the line flows smoothly ──
   const chartData = useMemo(() => {
-    const grouped: Record<string, { date: string; calls: number }> = {};
+    const days = parseInt(dateRange);
+    const now = new Date();
+    const dateMap: Record<string, number> = {};
+
+    // Seed every day in the range with 0
+    for (let i = days - 1; i >= 0; i--) {
+      const d = new Date(now);
+      d.setDate(d.getDate() - i);
+      const label = d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+      dateMap[label] = 0;
+    }
+
+    // Tally actual calls
     calls.forEach((c) => {
-      const date = new Date(c.start_time || c.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric" });
-      if (!grouped[date]) grouped[date] = { date, calls: 0 };
-      grouped[date].calls++;
+      const label = new Date(c.start_time || c.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric" });
+      if (label in dateMap) dateMap[label]++;
     });
-    return Object.values(grouped).reverse();
-  }, [calls]);
+
+    return Object.entries(dateMap).map(([date, calls]) => ({ date, calls }));
+  }, [calls, dateRange]);
 
   // ── Sentiment data ──
   const sentimentData = useMemo(() => {
