@@ -1,15 +1,27 @@
 
 
-## Update Browser Tab Icon (Favicon)
+## Problem
 
-The "grey globe" you're seeing in the browser tab is the default favicon. We'll replace it with your StratixOS hexagonal logo so it shows your brand icon in browser tabs, Google search results, and bookmarks.
+All RLS policies across `calls`, `profiles`, and `user_roles` tables are created as **RESTRICTIVE** (`Permissive: No`). PostgreSQL requires at least one PERMISSIVE policy to grant access — RESTRICTIVE policies can only narrow it down. With no PERMISSIVE policies, every query returns empty results for everyone.
 
-### What will change
-- Copy your uploaded logo to the project's public folder
-- Update the HTML to reference your logo as the site's favicon
-- The new icon will appear in browser tabs and search results
+## Fix
 
-### Technical details
-1. Copy `user-uploads://StratixOS_logo_copy-2.png` to `public/favicon.png`
-2. Update `index.html` to add a `<link rel="icon" href="/favicon.png" type="image/png">` tag in the `<head>`
+Drop and recreate all RLS policies as **PERMISSIVE** (the default) with the same logic:
+
+### 1. `calls` table (3 policies)
+- **Users can view their own calls** — `SELECT` where `auth.uid() = user_id` (PERMISSIVE)
+- **Admins can view all calls** — `SELECT` where `has_role(auth.uid(), 'admin')` (PERMISSIVE)
+- **System can insert calls** — `INSERT` with check `true` (PERMISSIVE)
+
+### 2. `profiles` table (5 policies)
+- **Users can view their own profile** — `SELECT` where `auth.uid() = id` (PERMISSIVE)
+- **Admins can view all profiles** — `SELECT` where `has_role(auth.uid(), 'admin')` (PERMISSIVE)
+- **Users can update their own profile** — `UPDATE` where `auth.uid() = id` (PERMISSIVE)
+- **Admins can update all profiles** — `UPDATE` where `has_role(auth.uid(), 'admin')` (PERMISSIVE)
+- **Service role can insert profiles** — `INSERT` with check `true` (PERMISSIVE)
+
+### 3. `user_roles` table (1 policy)
+- **Users can view their own roles** — `SELECT` where `auth.uid() = user_id` (PERMISSIVE)
+
+All policies keep the exact same access logic — only the RESTRICTIVE → PERMISSIVE change is needed. This is a single database migration with DROP + CREATE for each policy.
 
