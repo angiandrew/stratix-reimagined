@@ -69,6 +69,26 @@ Deno.serve(async (req) => {
       start_time = new Date(call.end_timestamp - call.duration_ms).toISOString();
     }
 
+    const retellCallId = call.call_id;
+
+    // Deduplicate: skip if this call_id was already stored
+    if (retellCallId) {
+      const { data: existing } = await supabase
+        .from("calls")
+        .select("call_id")
+        .eq("org_id", org_id)
+        .eq("start_time", start_time)
+        .eq("duration_seconds", call.duration_ms ? Math.round(call.duration_ms / 1000) : 0)
+        .maybeSingle();
+
+      if (existing) {
+        return new Response(
+          JSON.stringify({ success: true, message: "Duplicate call, skipped", call_id: retellCallId }),
+          { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
+    }
+
     const callRecord = {
       user_id: profile.id,
       org_id,
