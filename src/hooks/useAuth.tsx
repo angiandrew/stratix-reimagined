@@ -35,12 +35,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       async (_event, session) => {
         setSession(session);
         setUser(session?.user ?? null);
+        setLoading(false);
         if (session?.user) {
-          await checkAdmin(session.user.id);
+          // Check admin in background, don't block loading
+          checkAdmin(session.user.id);
         } else {
           setIsAdmin(false);
         }
-        setLoading(false);
       }
     );
 
