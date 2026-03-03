@@ -9,6 +9,10 @@ import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
 import Admin from "./pages/Admin";
+import Pricing from "./pages/Pricing";
+import Solutions from "./pages/Solutions";
+import Resources from "./pages/Resources";
+import Calculator from "./pages/Calculator";
 import ProtectedRoute from "./components/ProtectedRoute";
 import NotFound from "./pages/NotFound";
 
@@ -24,6 +28,10 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/auth" element={<Auth />} />
+            <Route path="/pricing" element={<Pricing />} />
+            <Route path="/solutions" element={<Solutions />} />
+            <Route path="/resources" element={<Resources />} />
+            <Route path="/calculator" element={<Calculator />} />
             <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
             <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
             <Route path="/admin" element={<ProtectedRoute adminOnly><Admin /></ProtectedRoute>} />
