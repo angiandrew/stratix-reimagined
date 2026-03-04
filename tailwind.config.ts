@@ -13,10 +13,6 @@ export default {
       },
     },
     extend: {
-      fontFamily: {
-        sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
-        display: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
-      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -61,22 +57,6 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
-        // Redesign tokens
-        navy: {
-          DEFAULT: "hsl(var(--navy))",
-          light: "hsl(var(--navy-light))",
-        },
-        electric: {
-          DEFAULT: "hsl(var(--electric))",
-          foreground: "hsl(var(--electric-foreground))",
-          muted: "hsl(var(--electric-muted))",
-        },
-        "light-fg": "hsl(var(--light-fg))",
-        "light-muted": "hsl(var(--light-muted))",
-        "light-bg": "hsl(var(--light-bg))",
-        "light-card": "hsl(var(--light-card))",
-        "light-border": "hsl(var(--light-border))",
-        "card-light": "hsl(var(--card-light))",
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -85,22 +65,25 @@ export default {
       },
       keyframes: {
         "accordion-down": {
-          from: { height: "0" },
-          to: { height: "var(--radix-accordion-content-height)" },
+          from: {
+            height: "0",
+          },
+          to: {
+            height: "var(--radix-accordion-content-height)",
+          },
         },
         "accordion-up": {
-          from: { height: "var(--radix-accordion-content-height)" },
-          to: { height: "0" },
-        },
-        marquee: {
-          "0%": { transform: "translateX(0)" },
-          "100%": { transform: "translateX(-50%)" },
+          from: {
+            height: "var(--radix-accordion-content-height)",
+          },
+          to: {
+            height: "0",
+          },
         },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        marquee: "marquee 40s linear infinite",
       },
     },
   },

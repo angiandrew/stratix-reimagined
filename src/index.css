@@ -53,14 +53,6 @@
     --sidebar-accent-foreground: 210 15% 75%;
     --sidebar-border: 210 20% 92% / 0.08;
     --sidebar-ring: 187 72% 53%;
-
-    /* Redesign tokens */
-    --navy: 225 50% 8%;
-    --navy-light: 225 40% 14%;
-    --electric: 217 91% 53%;
-    --electric-foreground: 0 0% 100%;
-    --electric-muted: 217 70% 65%;
-    --card-light: 0 0% 96%;
   }
 }
 
@@ -71,7 +63,6 @@
 
   body {
     @apply bg-background text-foreground;
-    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
   }
 
   html {
@@ -107,25 +98,4 @@
 }
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
-}
-
-/* Marquee animation */
-@keyframes marquee {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-
-/* Redesign utilities */
-.section-navy {
-  background: hsl(var(--navy));
-  color: white;
-}
-
-.section-white {
-  background: white;
-  color: hsl(var(--light-fg));
-}
-
-.section-white .text-section-muted {
-  color: hsl(var(--light-muted));
 }

@@ -1,20 +1,25 @@
-import PublicLayout from "@/components/redesign/PublicLayout";
-import HeroSection from "@/components/redesign/HeroSection";
-import LogoMarquee from "@/components/redesign/LogoMarquee";
-import BentoGrid from "@/components/redesign/BentoGrid";
-import HowItWorks from "@/components/redesign/HowItWorks";
-import Industries from "@/components/redesign/Industries";
-import CTABanner from "@/components/redesign/CTABanner";
+import Navbar from "@/components/Navbar";
+import HeroSection from "@/components/HeroSection";
+import ServicesSection from "@/components/ServicesSection";
+import AgentShowcaseSection from "@/components/AgentShowcaseSection";
+import AnalyticsDashboardSection from "@/components/AnalyticsDashboardSection";
+import HowItWorksSection from "@/components/HowItWorksSection";
+import WhyUsSection from "@/components/WhyUsSection";
+import ContactSection from "@/components/ContactSection";
+import Footer from "@/components/Footer";
 
 const Index = () => (
-  <PublicLayout transparentNav>
+  <div className="min-h-screen bg-background">
+    <Navbar />
     <HeroSection />
-    <LogoMarquee />
-    <BentoGrid />
-    <HowItWorks />
-    <Industries />
-    <CTABanner />
-  </PublicLayout>
+    <ServicesSection />
+    <AgentShowcaseSection />
+    <AnalyticsDashboardSection />
+    <HowItWorksSection />
+    <WhyUsSection />
+    <ContactSection />
+    <Footer />
+  </div>
 );
 
 export default Index;
