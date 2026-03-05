@@ -1,24 +1,36 @@
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
-import ServicesSection from "@/components/ServicesSection";
-import AgentShowcaseSection from "@/components/AgentShowcaseSection";
-import AnalyticsDashboardSection from "@/components/AnalyticsDashboardSection";
-import HowItWorksSection from "@/components/HowItWorksSection";
-import WhyUsSection from "@/components/WhyUsSection";
+import EndToEndIntro from "@/components/EndToEndIntro";
+import PeelCardsSection from "@/components/PeelCardsSection";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
 
 const Index = () => (
-  <div className="min-h-screen bg-background">
+  <div className="bg-white">
     <Navbar />
+
+    {/* Dark hero */}
     <HeroSection />
-    <ServicesSection />
-    <AgentShowcaseSection />
-    <AnalyticsDashboardSection />
-    <HowItWorksSection />
-    <WhyUsSection />
-    <ContactSection />
-    <Footer />
+
+    {/* Dark → light bridge */}
+    <div
+      style={{
+        height: 64,
+        background: "linear-gradient(to bottom, hsl(215,28%,6%) 0%, #ffffff 100%)",
+      }}
+    />
+
+    {/* Intro header */}
+    <EndToEndIntro />
+
+    {/* Framer Motion peel cards */}
+    <PeelCardsSection />
+
+    {/* Footer sits below the stack */}
+    <div style={{ position: "relative", zIndex: 50, backgroundColor: "#fff" }}>
+      <ContactSection />
+      <Footer />
+    </div>
   </div>
 );
 
