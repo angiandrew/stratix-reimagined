@@ -9,6 +9,11 @@ import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
 import Admin from "./pages/Admin";
+import BookDemo from "./pages/BookDemo";
+import Pricing from "./pages/Pricing";
+import Automations from "./pages/Automations";
+import RoiCalculator from "./pages/RoiCalculator";
+import IndustryPage from "./pages/IndustryPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import NotFound from "./pages/NotFound";
 
@@ -24,6 +29,11 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/auth" element={<Auth />} />
+            <Route path="/book-demo" element={<BookDemo />} />
+            <Route path="/pricing" element={<Pricing />} />
+            <Route path="/automations" element={<Automations />} />
+            <Route path="/roi-calculator" element={<RoiCalculator />} />
+            <Route path="/industries/:slug" element={<IndustryPage />} />
             <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
             <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
             <Route path="/admin" element={<ProtectedRoute adminOnly><Admin /></ProtectedRoute>} />

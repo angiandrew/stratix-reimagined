@@ -415,8 +415,8 @@ const PeelCardsSection = () => {
   const y3 = useTransform(scrollYProgress, [0.5, 1.0], ["100%", "0%"]);
 
   return (
-    <div ref={sectionRef} style={{ height: "300vh" }}>
-      <div className="sticky top-0 h-screen overflow-hidden">
+    <div ref={sectionRef} style={{ height: "345vh" }}>
+      <div className="sticky top-16 h-[calc(100vh-4rem)] overflow-hidden">
 
         {/* Card 1 — base layer, always visible underneath */}
         <CardShell zIndex={10} rounded={false}>
