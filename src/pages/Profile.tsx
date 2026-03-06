@@ -42,7 +42,7 @@ const Profile = () => {
     setSaving(true);
     const { error } = await supabase
       .from("profiles")
-      .update({ org_id: orgId || null, display_name: displayName })
+      .update({ display_name: displayName })
       .eq("id", user.id);
 
     if (error) {
@@ -70,7 +70,7 @@ const Profile = () => {
         <Card className="border-border/10 bg-card/60">
           <CardHeader>
             <CardTitle>Profile Settings</CardTitle>
-            <CardDescription>Manage your account and Retell integration</CardDescription>
+            <CardDescription>Manage your account settings</CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             {loading ? (
@@ -93,16 +93,17 @@ const Profile = () => {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="orgId">Org ID (Retell Agent ID)</Label>
+                  <Label>Agent ID</Label>
                   <Input
-                    id="orgId"
-                    value={orgId}
-                    onChange={(e) => setOrgId(e.target.value)}
-                    placeholder="e.g. 42f8d4e0-a321-4642-8e30-33bfad24b97e"
-                    className="bg-secondary/50 border-border/30 font-mono text-sm"
+                    type="text"
+                    value={orgId ? "••••••••••••••••••••••••" : ""}
+                    disabled
+                    readOnly
+                    className="bg-secondary/30 border-border/20 font-mono text-sm opacity-60 cursor-not-allowed"
+                    tabIndex={-1}
                   />
                   <p className="text-xs text-muted-foreground">
-                    This is your Retell agent_id. Calls from this agent will appear in your dashboard.
+                    Your agent configuration is managed by StratixOS.
                   </p>
                 </div>
                 <Button onClick={handleSave} disabled={saving} className="w-full gap-2">
