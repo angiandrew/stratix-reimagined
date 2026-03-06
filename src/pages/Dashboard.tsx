@@ -700,6 +700,9 @@ const Dashboard = () => {
           <button onClick={() => navigate("/profile")} style={navBtn(false)}>
             <User size={15} /> Profile
           </button>
+          <button onClick={() => navigate("/")} style={navBtn(false)}>
+            <ChevronLeft size={15} /> Back to Website
+          </button>
           <button onClick={handleSignOut} style={{ ...navBtn(false), color: "#ef4444" }}>
             <LogOut size={15} /> Sign Out
           </button>
