@@ -4,8 +4,9 @@ import {
   SiSlack, SiGmail, SiSalesforce, SiHubspot,
   SiNotion, SiGooglecalendar, SiAirtable, SiZapier,
   SiStripe, SiShopify, SiInstagram, SiDropbox, SiZoho,
-  SiLinear, SiTwilio,
+  SiLinear, SiTwilio, SiFacebook, SiWhatsapp, SiTelegram,
 } from "react-icons/si";
+import { FaLinkedinIn } from "react-icons/fa";
 
 // ── Shared card shell ──────────────────────────────────────────────────────────
 
@@ -14,8 +15,7 @@ const VisualWrap = ({ children }: { children: React.ReactNode }) => (
     backgroundColor: "#ffffff",
     border: "1px solid #e8eaed",
     borderRadius: 12,
-    padding: "20px 20px 0",
-    overflow: "hidden",
+    padding: "16px 14px 0",
   }}>
     {children}
   </div>
@@ -290,144 +290,157 @@ const LeadVisual = () => {
   );
 };
 
-// ── 4. Direct Response Operator — 3-block horizontal flow ────────────────────
+// ── 4. Direct Response Operator — multi-channel orchestration ─────────────────
 
-const SocialTag = ({
-  text, color = "#6b7280", bg = "#f3f4f6", bd = "#e5e7eb",
-}: { text: string; color?: string; bg?: string; bd?: string }) => (
-  <div style={{
-    fontSize: 7.5, fontWeight: 500, color,
-    backgroundColor: bg, border: `1px solid ${bd}`,
-    borderRadius: 3, padding: "1.5px 5px",
-    display: "inline-flex", whiteSpace: "nowrap",
-    fontFamily: "system-ui,-apple-system,sans-serif",
-  }}>{text}</div>
-);
+const CHANNELS = [
+  { Icon: SiInstagram, color: "#E1306C", label: "Instagram", msg: "Love your post!" },
+  { Icon: SiFacebook,  color: "#1877F2", label: "Facebook",  msg: "What's the price?" },
+  { Icon: SiWhatsapp,  color: "#25D366", label: "WhatsApp",  msg: "Is this available?" },
+  { Icon: SiTelegram,  color: "#26A5E4", label: "Telegram",  msg: "Can I book now?" },
+  { Icon: FaLinkedinIn, color: "#0A66C2", label: "LinkedIn",  msg: "Tell me more." },
+];
 
-const SocialChevron = () => (
-  <div style={{
-    color: "#d1d5db", fontSize: 14, flexShrink: 0,
-    display: "flex", alignItems: "center", paddingBottom: 6,
-    userSelect: "none",
-  }}>›</div>
-);
+const OUTCOMES = [
+  { label: "Qualified Lead",          color: "#16a34a", bg: "#f0fdf4", bd: "#bbf7d0" },
+  { label: "Routed to Sales",         color: "#0369a1", bg: "#f0f9ff", bd: "#bae6fd" },
+  { label: "Booking Link Sent",       color: "#7c3aed", bg: "#faf5ff", bd: "#e9d5ff" },
+  { label: "Nurture Sequence Started",color: "#b45309", bg: "#fffbeb", bd: "#fde68a" },
+];
 
 const SocialVisual = () => {
-  const [phase, setPhase] = useState(0);
+  const [activeChannel, setActiveChannel] = useState(0);
+  const [chipVisible, setChipVisible] = useState(true);
+  const [outcomeIdx, setOutcomeIdx] = useState(0);
+  const [outcomeVisible, setOutcomeVisible] = useState(true);
 
   useEffect(() => {
-    const DELAYS = [2200, 2800, 3000];
-    let t: ReturnType<typeof setTimeout>;
-    const schedule = (p: number) => {
-      t = setTimeout(() => {
-        const next = (p + 1) % 3;
-        setPhase(next);
-        schedule(next);
-      }, DELAYS[p]);
+    const cycle = () => {
+      // fade chip out, switch channel, fade in
+      setChipVisible(false);
+      setTimeout(() => {
+        setActiveChannel(p => (p + 1) % CHANNELS.length);
+        setOutcomeIdx(p => (p + 1) % OUTCOMES.length);
+        setChipVisible(true);
+        setOutcomeVisible(true);
+      }, 350);
     };
-    schedule(0);
-    return () => clearTimeout(t);
+    const t = setInterval(cycle, 2400);
+    return () => clearInterval(t);
   }, []);
 
-  const block = (p: number): React.CSSProperties => ({
-    flex: 1, minWidth: 0, backgroundColor: "#fff",
-    border: `1.5px solid ${phase === p ? "#111827" : "#e8eaed"}`,
-    borderRadius: 10, padding: "10px",
-    transition: "border-color 0.4s ease",
-    fontFamily: "system-ui,-apple-system,sans-serif",
-    display: "flex", flexDirection: "column",
-  });
+  const ch = CHANNELS[activeChannel];
 
   return (
     <VisualWrap>
-      <div style={{ display: "flex", gap: 7, paddingBottom: 20, alignItems: "stretch" }}>
+      <div style={{
+        display: "flex", alignItems: "center", gap: 0,
+        paddingBottom: 20, minHeight: 220, fontFamily: "system-ui,-apple-system,sans-serif",
+        overflow: "visible",
+      }}>
 
-        {/* ── Block 1: Ad ── */}
-        <div style={block(0)}>
-          <div style={{ display: "flex", alignItems: "center", gap: 5, marginBottom: 8 }}>
-            <div style={{ width: 18, height: 18, borderRadius: "50%", backgroundColor: "#111827", flexShrink: 0 }} />
-            <div>
-              <div style={{ fontSize: 8.5, fontWeight: 600, color: "#111827", lineHeight: 1.2 }}>stratixos</div>
-              <div style={{ fontSize: 7, color: "#9ca3af" }}>Sponsored</div>
+        {/* ── Left: channel stack ── */}
+        <div style={{ display: "flex", flexDirection: "column", gap: 7, flex: "0 0 auto" }}>
+          {CHANNELS.map(({ Icon, color, label }, i) => (
+            <div key={label} style={{
+              display: "flex", alignItems: "center", gap: 6,
+              backgroundColor: i === activeChannel ? "#f8fafc" : "#fff",
+              border: `1px solid ${i === activeChannel ? "#e2e8f0" : "#f0f0f0"}`,
+              borderRadius: 8, padding: "5px 8px",
+              transition: "all 0.35s ease",
+              opacity: i === activeChannel ? 1 : 0.5,
+            }}>
+              <Icon size={13} color={color} style={{ flexShrink: 0 }} />
+              <span style={{ fontSize: 9, fontWeight: 600, color: "#374151" }}>{label}</span>
             </div>
-          </div>
-          {/* Post preview — flex:1 so it fills available space */}
+          ))}
+        </div>
+
+        {/* ── Center connector + chip ── */}
+        <div style={{
+          flex: 1, display: "flex", flexDirection: "column",
+          alignItems: "center", justifyContent: "center", gap: 6, position: "relative",
+        }}>
+          {/* Dashed line */}
           <div style={{
-            flex: 1, backgroundColor: "#f1f5f9", borderRadius: 7, marginBottom: 8,
-            display: "flex", flexDirection: "column", justifyContent: "center",
-            padding: "10px", gap: 5,
-          }}>
-            {[75, 55, 65].map((w, i) => (
-              <div key={i} style={{ height: 3, width: `${w}%`, backgroundColor: "#d1d5db", borderRadius: 2 }} />
-            ))}
-          </div>
+            position: "absolute", top: "50%", left: 0, right: 0, height: 1,
+            borderTop: "1.5px dashed #e2e8f0", zIndex: 0,
+          }} />
+          {/* Animated message chip */}
           <div style={{
-            backgroundColor: phase === 0 ? "#111827" : "#6b7280",
-            color: "#fff", borderRadius: 6, padding: "6px 0",
-            textAlign: "center", fontSize: 8.5, fontWeight: 600,
-            transition: "background-color 0.4s ease", flexShrink: 0,
+            position: "relative", zIndex: 1,
+            backgroundColor: "#fff",
+            border: "1px solid #e2e8f0",
+            borderRadius: 20, padding: "5px 10px",
+            fontSize: 9, color: "#374151", fontWeight: 500,
+            boxShadow: "0 1px 6px rgba(0,0,0,0.06)",
+            whiteSpace: "nowrap", maxWidth: 100, overflow: "hidden", textOverflow: "ellipsis",
+            opacity: chipVisible ? 1 : 0,
+            transform: chipVisible ? "translateX(0)" : "translateX(-8px)",
+            transition: "opacity 0.35s ease, transform 0.35s ease",
           }}>
-            {phase === 0 ? "Send Message" : "✓ Sent"}
+            {ch.msg}
           </div>
         </div>
 
-        <SocialChevron />
-
-        {/* ── Block 2: DM Chat ── */}
-        <div style={block(1)}>
-          <div style={{ display: "flex", gap: 3, marginBottom: 8, flexWrap: "wrap" }}>
-            <SocialTag text="Intent Detected" />
-            <SocialTag text="Score: 91" color="#0f172a" bg="#f8fafc" bd="#e2e8f0" />
-          </div>
-          {/* Messages — flex:1 to fill */}
-          <div style={{ display: "flex", flexDirection: "column", gap: 5, flex: 1 }}>
-            <div style={{ alignSelf: "flex-end" }}>
-              <div style={{
-                backgroundColor: "#111827", color: "#fff",
-                borderRadius: "8px 8px 2px 8px", padding: "4px 8px", fontSize: 8.5,
-              }}>How much does this cost?</div>
-            </div>
-            <div style={{
-              backgroundColor: "#f8fafc", border: "1px solid #e8eaed",
-              borderRadius: "8px 8px 8px 2px", padding: "5px 7px",
-              fontSize: 8.5, color: "#374151",
-            }}>Happy to help — want pricing?</div>
-          </div>
-          {/* Quick replies — horizontal pills */}
-          <div style={{ display: "flex", gap: 3, marginTop: 8, flexWrap: "wrap", flexShrink: 0 }}>
-            {["Learn More", "Get Pricing", "Talk to Agent"].map(opt => (
-              <div key={opt} style={{
-                border: "1px solid #e2e8f0", borderRadius: 12,
-                padding: "2px 6px", fontSize: 7, color: "#374151",
-                backgroundColor: "#fff", whiteSpace: "nowrap",
-              }}>{opt}</div>
+        {/* ── Center hub ── */}
+        <div style={{
+          flex: "0 0 auto",
+          backgroundColor: "#0f172a",
+          borderRadius: 12, padding: "10px 12px",
+          display: "flex", flexDirection: "column", alignItems: "center", gap: 4,
+          boxShadow: "0 2px 16px rgba(15,23,42,0.18)",
+          minWidth: 82,
+        }}>
+          {/* Pulsing dots */}
+          <div style={{ display: "flex", gap: 4, marginBottom: 2 }}>
+            {[0, 0.3, 0.6].map((d, i) => (
+              <div key={i} style={{
+                width: 5, height: 5, borderRadius: "50%", backgroundColor: "#818cf8",
+                animation: "livePulse 1.4s ease-in-out infinite",
+                animationDelay: `${d}s`,
+              }} />
             ))}
+          </div>
+          <div style={{ fontSize: 8, fontWeight: 700, color: "#fff", textAlign: "center", lineHeight: 1.3 }}>
+            Direct Response<br />Operator
+          </div>
+          <div style={{
+            fontSize: 7, color: "#94a3b8", textAlign: "center",
+            backgroundColor: "rgba(255,255,255,0.06)", borderRadius: 4,
+            padding: "2px 6px", marginTop: 2,
+          }}>
+            AI Response Engine
           </div>
         </div>
 
-        <SocialChevron />
+        {/* ── Right connector ── */}
+        <div style={{
+          flex: 1, display: "flex", alignItems: "center", justifyContent: "center",
+          position: "relative",
+        }}>
+          <div style={{
+            position: "absolute", top: "50%", left: 0, right: 0, height: 1,
+            borderTop: "1.5px dashed #e2e8f0", zIndex: 0,
+          }} />
+          {/* Arrow */}
+          <div style={{ position: "relative", zIndex: 1, color: "#cbd5e1", fontSize: 14, userSelect: "none" }}>›</div>
+        </div>
 
-        {/* ── Block 3: Qualification ── */}
-        <div style={block(2)}>
-          {/* Conversation — flex:1 to fill */}
-          <div style={{ display: "flex", flexDirection: "column", gap: 5, flex: 1 }}>
-            <div style={{
-              backgroundColor: "#f8fafc", border: "1px solid #e8eaed",
-              borderRadius: "8px 8px 8px 2px", padding: "5px 7px",
-              fontSize: 8.5, color: "#374151",
-            }}>Could you share your budget?</div>
-            <div style={{
-              alignSelf: "flex-end",
-              backgroundColor: "#111827", color: "#fff",
-              borderRadius: "8px 8px 2px 8px", padding: "4px 8px", fontSize: 8.5,
-            }}>$5,000 – $10,000</div>
-          </div>
-          {/* Status tags at bottom */}
-          <div style={{ display: "flex", flexDirection: "column", gap: 3, marginTop: 8, flexShrink: 0 }}>
-            <SocialTag text="Qualified Lead"    color="#16a34a" bg="#f0fdf4" bd="#bbf7d0" />
-            <SocialTag text="Routed to Sales"   color="#0369a1" bg="#f0f9ff" bd="#bae6fd" />
-            <SocialTag text="Booking Link Sent" color="#7c3aed" bg="#faf5ff" bd="#e9d5ff" />
-          </div>
+        {/* ── Right: outcome chips ── */}
+        <div style={{ display: "flex", flexDirection: "column", gap: 7, flex: "0 0 auto" }}>
+          {OUTCOMES.map(({ label, color, bg, bd }, i) => (
+            <div key={label} style={{
+              fontSize: 8, fontWeight: 600, color,
+              backgroundColor: bg, border: `1px solid ${bd}`,
+              borderRadius: 6, padding: "4px 8px",
+              whiteSpace: "nowrap",
+              opacity: i === outcomeIdx ? (outcomeVisible ? 1 : 0) : 0.3,
+              transform: i === outcomeIdx ? "translateX(0)" : "translateX(4px)",
+              transition: "opacity 0.35s ease, transform 0.35s ease",
+            }}>
+              {label}
+            </div>
+          ))}
         </div>
 
       </div>
@@ -622,7 +635,8 @@ const CARDS = [
     description: "Automatically qualify and route inbound social conversations.",
     bullets: ["Instant replies to DMs and comments", "Lead intent detection", "Auto routing to booking or CRM", "Human takeover for qualified prospects"],
     visual: <SocialVisual />,
-    justify: "center", align: "flex-start",
+    justify: "center", align: "center",
+    visualWidth: "100%",
   },
   {
     label: "Data Management",
@@ -649,6 +663,50 @@ const ROWS = [
   [CARDS[2], CARDS[3]],
   [CARDS[4], CARDS[5]],
 ];
+
+// ── Animated card wrapper ───────────────────────────────────────────────────────
+
+const AnimatedCard = ({
+  children,
+  direction,
+  delay,
+}: {
+  children: React.ReactNode;
+  direction: "left" | "right";
+  delay: number;
+}) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => { setVisible(entry.isIntersecting); },
+      { threshold: 0.12 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  const x = direction === "left" ? -44 : 44;
+
+  return (
+    <div
+      ref={ref}
+      style={{
+        border: "1px solid #e2e8f0",
+        opacity: visible ? 1 : 0,
+        transform: visible
+          ? "translateX(0) translateY(0)"
+          : `translateX(${x}px) translateY(10px)`,
+        transition: `opacity 1050ms cubic-bezier(0.22,1,0.36,1) ${visible ? delay : 0}ms, transform 1050ms cubic-bezier(0.22,1,0.36,1) ${visible ? delay : 0}ms`,
+      }}
+    >
+      {children}
+    </div>
+  );
+};
 
 // ── Section ────────────────────────────────────────────────────────────────────
 
@@ -683,9 +741,13 @@ const IntelligentSystemsSection = () => (
             <div key={rowIdx}>
               {rowIdx > 0 && <div style={{ height: 20 }} />}
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", columnGap: 20 }}>
-                {row.map((card) => (
-                  <div key={card.title} style={{ border: "1px solid #e2e8f0" }}>
-                    {/* Visual area — tall grey box, infographic floats to position */}
+                {row.map((card, colIdx) => (
+                  <AnimatedCard
+                    key={card.title}
+                    direction={colIdx === 0 ? "left" : "right"}
+                    delay={colIdx * 120}
+                  >
+                    {/* Visual area */}
                     <div style={{
                       backgroundColor: "#f5f5f5",
                       height: 380,
@@ -718,7 +780,7 @@ const IntelligentSystemsSection = () => (
                         ))}
                       </ul>
                     </div>
-                  </div>
+                  </AnimatedCard>
                 ))}
               </div>
             </div>

@@ -8,6 +8,7 @@ import {
 } from "react-icons/si";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import RoiCalculatorSection from "@/components/RoiCalculatorSection";
 
 /* ─────────────────────────────────────────────
    Types
@@ -88,10 +89,10 @@ const DATA: Record<string, IndustryData> = {
       },
     ],
     stats: [
-      { value: "< 500ms", label: "Call answer time" },
-      { value: "40%", label: "More jobs booked" },
-      { value: "75%", label: "Less admin time" },
-      { value: "3–5×", label: "ROI in 90 days" },
+      { value: "85%", label: "of callers who hit voicemail never call back" },
+      { value: "62%", label: "of customers hire whoever responds first" },
+      { value: "391%", label: "more conversions when you respond in under 1 min" },
+      { value: "$1,200+", label: "average revenue lost per missed service call" },
     ],
     testimonials: [
       { quote: "We booked 40% more appointments in the first month without hiring anyone. The AI handles everything we used to miss after hours.", name: "David Osei", title: "Owner, Premier HVAC Services", initials: "DO" },
@@ -150,10 +151,10 @@ const DATA: Record<string, IndustryData> = {
       },
     ],
     stats: [
-      { value: "< 2s", label: "Lead response time" },
-      { value: "3×", label: "More qualified bookings" },
-      { value: "100%", label: "Lead contact rate" },
-      { value: "3–5×", label: "ROI in 90 days" },
+      { value: "78%", label: "of leads go to the first firm that responds — HBR" },
+      { value: "47 hrs", label: "average industry lead response time" },
+      { value: "27%", label: "of inbound leads ever get contacted at all" },
+      { value: "50%", label: "of sales go to the vendor who responds first" },
     ],
     testimonials: [
       { quote: "The ROI was immediate. Every lead is now followed up within seconds. We've seen a 3x increase in qualified bookings since going live.", name: "James Okafor", title: "Founder, Peak Financial Advisors", initials: "JO" },
@@ -212,10 +213,10 @@ const DATA: Record<string, IndustryData> = {
       },
     ],
     stats: [
-      { value: "< 2s", label: "Guest response time" },
-      { value: "60%", label: "Reduction in staff inquiries" },
-      { value: "35%", label: "Increase in direct rebookings" },
-      { value: "24/7", label: "Guest coverage" },
+      { value: "7×", label: "more bookings when responding in under 1 hour vs 2+" },
+      { value: "68%", label: "of guests won't rebook after poor communication" },
+      { value: "23%", label: "average ADR lift from pre-arrival upsell automation" },
+      { value: "$18K+", label: "annual revenue lost per property from slow guest comms" },
     ],
     testimonials: [
       { quote: "Our long-term mission is that if you're not on the property or interacting with a guest, you're AI. StratixOS made that real.", name: "Ryan Caldwell", title: "Revenue Director, Cascadia Stays", initials: "RC" },
@@ -274,10 +275,10 @@ const DATA: Record<string, IndustryData> = {
       },
     ],
     stats: [
-      { value: "< 2s", label: "Inquiry response time" },
-      { value: "30%", label: "More tee times filled" },
-      { value: "24/7", label: "Member coverage" },
-      { value: "3–5×", label: "ROI in 90 days" },
+      { value: "35%", label: "of tee times sit empty on an average weekday" },
+      { value: "$50K+", label: "annual revenue lost to unfilled tee times per course" },
+      { value: "72%", label: "of members cite poor communication as their top frustration" },
+      { value: "1 in 3", label: "corporate outing inquiries never receive a response" },
     ],
     testimonials: [
       { quote: "We stopped having empty tee times on weekday mornings. The automated last-minute offers fill gaps we never could have manually.", name: "Brad Morrison", title: "GM, Fairway National Golf Club", initials: "BM" },
@@ -336,10 +337,10 @@ const DATA: Record<string, IndustryData> = {
       },
     ],
     stats: [
-      { value: "60%", label: "Reduction in no-shows" },
-      { value: "< 500ms", label: "Call answer time" },
-      { value: "40%", label: "More bookings per month" },
-      { value: "24/7", label: "Patient coverage" },
+      { value: "$150B", label: "lost annually to no-shows in US healthcare" },
+      { value: "5–8%", label: "of practice revenue lost to no-shows every month" },
+      { value: "44%", label: "of patients choose providers based on booking speed" },
+      { value: "67%", label: "of patients prefer booking without calling the front desk" },
     ],
     testimonials: [
       { quote: "The voice agent sounds completely natural. Patients can't tell it's AI — and our booking accuracy actually improved.", name: "Lisa Hernandez", title: "CEO, MedSpa Collective", initials: "LH" },
@@ -398,10 +399,10 @@ const DATA: Record<string, IndustryData> = {
       },
     ],
     stats: [
-      { value: "< 2s", label: "Lead response time" },
-      { value: "3×", label: "More qualified showings" },
-      { value: "50%", label: "Less admin per agent" },
-      { value: "24/7", label: "Lead coverage" },
+      { value: "44%", label: "of Zillow leads never receive any response" },
+      { value: "21×", label: "more likely to qualify a lead if you respond within 5 min" },
+      { value: "15 hrs", label: "average time agents spend on admin work every week" },
+      { value: "25%", label: "less tenant turnover with automated maintenance response" },
     ],
     testimonials: [
       { quote: "We stopped losing Zillow leads to competitors because our response time is now under 2 seconds, day or night.", name: "Rachel Kim", title: "Founder, Elite Realty Partners", initials: "RK" },
@@ -723,6 +724,9 @@ const IndustryPage = () => {
           </div>
         </div>
       </section>
+
+      {/* ── ROI Calculator ── */}
+      <RoiCalculatorSection />
 
       {/* ── FAQ (white) ── */}
       <section className="py-20 px-6 bg-white">

@@ -66,7 +66,7 @@ const Navbar = () => {
               <Link
                 to="/dashboard"
                 className="inline-flex items-center rounded-lg px-4 py-2 text-sm font-semibold text-white transition-colors"
-                style={{ backgroundColor: "#0f172a" }}
+                style={{ backgroundColor: "#6366f1" }}
               >
                 Dashboard
               </Link>
