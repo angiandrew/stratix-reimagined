@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import logo from "@/assets/stratixos-logo.png";
 
 const Footer = () => (
@@ -18,6 +19,10 @@ const Footer = () => (
       <p className="text-xs" style={{ color: "hsl(var(--light-muted))" }}>
         &copy; {new Date().getFullYear()} StratixOS. All rights reserved.
       </p>
+    </div>
+    <div className="container mx-auto px-4 mt-4 flex justify-center gap-6 text-xs" style={{ color: "hsl(var(--light-muted))" }}>
+      <Link to="/privacy-policy" className="hover:text-[hsl(var(--light-fg))] transition-colors">Privacy Policy</Link>
+      <Link to="/terms" className="hover:text-[hsl(var(--light-fg))] transition-colors">Terms &amp; Conditions</Link>
     </div>
   </footer>
 );
