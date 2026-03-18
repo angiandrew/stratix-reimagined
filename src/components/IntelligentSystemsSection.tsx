@@ -734,7 +734,7 @@ const IntelligentSystemsSection = () => (
         to   { opacity: 1; transform: translateY(0); }
       }
     `}</style>
-    <section style={{ backgroundColor: "#ffffff", paddingBottom: 96 }}>
+    <section className="iss-section" style={{ backgroundColor: "#ffffff", paddingBottom: 96 }}>
       <div className="mx-auto max-w-6xl px-6 sm:px-10">
         <div>
           {ROWS.map((row, rowIdx) => (
