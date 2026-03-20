@@ -25,6 +25,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import NotFound from "./pages/NotFound";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Terms from "./pages/Terms";
+import VerbalOptInScript from "./pages/VerbalOptInScript";
 
 const queryClient = new QueryClient();
 
@@ -49,6 +50,7 @@ const App = () => (
             <Route path="/admin" element={<ProtectedRoute adminOnly><Admin /></ProtectedRoute>} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/terms" element={<Terms />} />
+            <Route path="/verbal-opt-in-script" element={<VerbalOptInScript />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>
