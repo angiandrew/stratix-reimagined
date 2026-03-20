@@ -55,6 +55,10 @@ const PrivacyPolicy = () => (
             You can opt out at any time by replying <strong>STOP</strong> to any message you receive
             from us.
           </p>
+          <p className="mt-3">
+            No mobile information will be shared with third parties or affiliates for marketing or
+            promotional purposes.
+          </p>
         </section>
 
         <section>
